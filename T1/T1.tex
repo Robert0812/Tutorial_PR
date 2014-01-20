@@ -1,0 +1,243 @@
+\documentclass[compress,blue]{beamer}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{mathtools}
+\renewcommand\mathfamilydefault{\rmdefault}
+
+
+\usetikzlibrary{shapes.arrows}
+\tikzset{
+    myarrow/.style={
+        draw,
+        fill=red,
+        single arrow,
+        minimum height=3.5ex,
+        single arrow head extend=1ex
+    }
+}
+\newcommand{\arrowup}{%
+\tikz [baseline=-0.5ex]{\node [myarrow,rotate=90] {};}
+}
+\newcommand{\arrowdown}{%
+\tikz [baseline=-1ex]{\node [myarrow,rotate=-90] {};}
+}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+
+\usetheme{Warsaw}
+
+\title[ENGG 5202 Pattern Recogntion Tutorial 1]{Tutorial 1: Bayesian Decision Theory}
+\author{Rui Zhao}
+\institute{rzhao@ee.cuhk.edu.hk}
+\date{Jan. 16, 2014}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\setbeamertemplate{enumerate items}[square]
+\setbeamertemplate{itemize items}[square]
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> Decision to minimize overal expected loss
+		\vspace{0.1in}
+		\item<2-> Multivariate Normal Distribution
+		\vspace{0.1in}
+		\item<3-> Decision surface for linear machines
+		\begin{itemize}
+			\item case 1: $\mathbf{\Sigma_i} = \mathbf{\sigma}^2\mathbf{I}$
+			\item case 2: $\mathbf{\Sigma_i} = \mathbf{\Sigma}$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{1. Decision to minimize overal expected loss}
+	\begin{block}{Discriminant functions}
+		\uncover<2->{
+		Decide $w_1$ if $R(w_1 | \mathbf{x}) < R(w_2 | \mathbf{x})$, i.e., 
+		$$\lambda_{11} P(w_1 | \mathbf{x}) + \lambda_{12} P(w_2 | \mathbf{x}) < \lambda_{21} P(w_1 | \mathbf{x}) + \lambda_{22} P(w_2 | \mathbf{x})$$
+		}
+		\uncover<3->{
+		$$\arrowdown ?$$
+		$$\frac{P(\mathbf{x}|w_1)}{P(\mathbf{x}|w_2)} > \frac{\lambda_{12} - \lambda_{22}}{\lambda_{21} - \lambda_{11}} \frac{P(w_2)}{P(w_1)}$$
+		}
+	\end{block}
+\end{frame}
+
+\begin{frame}{1. Decision to minimize overal expected loss}
+	\begin{block}{Expected loss of taking decision $w_i$}
+		\vspace{-0.15in}
+		\begin{align}
+			R(w_i|\mathbf{x}) = \sum_{j=1}^2 \lambda_{ij} P(w_j | \mathbf{x})
+		\end{align}
+		where $\lambda_{ij}$ is the loss for deciding $w_i$ when the true class is $w_j$.
+	\end{block}
+	\pause
+	\begin{block}{Derive discriminant functions to minimize overal risk}
+		Decide $w_1$ if $R(w_1 | \mathbf{x}) < R(w_2 | \mathbf{x})$, i.e.
+		\begin{align}
+			\sum_{j=1}^2 \lambda_{1j} P(w_j | \mathbf{x}) < \sum_{j=1}^2 \lambda_{2j} P(w_j | \mathbf{x})
+		\end{align}
+	\end{block}
+\end{frame}
+
+\begin{frame}{1. Decision to minimize overal expected loss}
+	\begin{block}{Bayesian theory}
+		\vspace{-0.15in}
+		\begin{align}
+			P(w_j | \mathbf{x}) \sim P(\mathbf{x} | w_j) P(w_j)
+		\end{align}
+	\end{block}
+	\pause
+	Decide $w_1$ if $R(w_1|\mathbf{x}) < R(w_2|\mathbf{x})$, i.e. discriminant function is derived as follows:
+	\begin{align}
+			\sum_{j=1}^2 \lambda_{1j} P(w_j | \mathbf{x}) < \sum_{j=1}^2 \lambda_{2j} P(w_j | \mathbf{x})\qquad\qquad\qquad\\
+			\Rightarrow \lambda_{11} P(w_1 | \mathbf{x}) + \lambda_{12} P(w_2 | \mathbf{x}) < \lambda_{21} P(w_1 | \mathbf{x}) + \lambda_{22} P(w_2 | \mathbf{x})\\
+			\Rightarrow \lambda_{11} P(\mathbf{x}|w_1)P(w_1) + \lambda_{12} P(\mathbf{x}|w_2)P(w_2)\qquad\qquad\qquad\\
+			 < \lambda_{21} P(\mathbf{x}|w_1)P(w_1) + \lambda_{22} P(\mathbf{x}|w_2)P(w_2)\\
+			\Rightarrow (\lambda_{12} - \lambda_{22})P(\mathbf{x}|w_2)P(w_2) < (\lambda_{21} - \lambda_{11})P(\mathbf{x}|w_1)P(w_1)\\
+			\Rightarrow \frac{P(\mathbf{x}|w_1)}{P(\mathbf{x}|w_2)} > \frac{\lambda_{12} - \lambda_{22}}{\lambda_{21} - \lambda_{11}} \frac{P(w_2)}{P(w_1)}.\# \qquad\qquad\qquad
+	\end{align}
+\end{frame}
+
+\begin{frame}{2. Multivariate Normal Distribution}
+	\begin{block}{Proposition: the distribution of each variable of a multivariate normal distribution is also a Gaussian.}
+		$$\mathbf{x} \sim \mathcal{N}(\mathbf{\mu}, \mathbf{\Sigma})$$
+		\pause
+		$$\arrowdown ?$$
+		$$x_i \sim \mathcal{N}(\mu_i, \sigma^2_{ii})$$
+		$$p(x_i) = \int \cdot\cdot\cdot \int p(\mathbf{x})\cdot\cdot\cdot dx_{i-1}dx_{i+1}\cdot\cdot\cdot$$
+	\end{block}
+\end{frame}
+
+\begin{frame}{2. Multivariate Normal Distribution}
+	\setbeamercovered{transparent}
+	\centering
+	\begin{align}
+		p(\mathbf{x}) = \frac{1}{(2\pi)^{d/2}|\mathbf{\Sigma}|^{1/2}} \exp\Big[-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu})\Big] \nonumber\\
+		p(\mathbf{x}) \sim \mathcal{N}(\mathbf{\mu}, \mathbf{\Sigma}) \nonumber\qquad\qquad\qquad\qquad
+	\end{align}	
+	\begin{itemize}
+		\item<2-> $\mathbf{x} = (x_1, \hdots, x_d)^t$ is the multivariate variable
+		\item<3-> $\mathbf{\mu} = (\mu_1, \hdots, \mu_d)^t$ is the mean vector
+		\item<4-> $\mathbf{\Sigma}=[\sigma_{ij}]$ is the $d\times d$ covariance matrix
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{2. Multivariate Normal Distribution}
+	\begin{block}{Covariance matrix $\mathbf{\Sigma}$}
+		\begin{itemize}
+			\item $\sigma_{ij}$ measures the covariance between variable $x_i$ and $x_j$. 
+			\item If $x_i$ and $x_j$ are statistically independent, then $\sigma_{ij}=0$.
+			\item If all variables are independent, then $p(\mathbf{x}) = p(x_1)\cdot\cdot\cdot p(x_d)$
+		\end{itemize}
+	\end{block}
+	\pause
+	\begin{block}{Marginal distribution}
+		The distribution of each variable $x_i$ is also a Gaussian, i.e. $x_i \sim \mathcal{N}(\mu_i, \sigma^2_{ii})$ \\
+		Proof: \\
+		Firstly, we consider the linear transform $\mathbf{y} = \mathbf{A}\mathbf{x} + \mathbf{b}$. \\
+		It is easy to prove that $\mathbf{x} \sim \mathcal{N}(\mathbf{\mu}, \mathbf{\Sigma}) \rightarrow \mathbf{y}\sim \mathcal{N}(\mathbf{A}\mathbf{\mu}+\mathbf{b}, \mathbf{A\Sigma A^t})$.
+		Let's choose $\mathbf{A} = e^t_i, \mathbf{b}=0$, the unit vector with $i$-th entry is 1, then we have $\mathbf{y} = x_i \sim \mathcal{N}(\mu_i, \sigma_{ii})$. \#
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Decision surface for linear machines}
+	\begin{block}{Discriminant function of multivariate normal distribution}
+		\begin{align}
+			g_i(x) = \ln p(\mathbf{x} | w_i) + \ln P(w_i) \\
+			p(\mathbf{x} | w_i) \sim \mathcal{N}(\mathbf{\mu}_i, \mathbf{\Sigma}_i) \qquad
+		\end{align}
+		\pause
+		\small
+		\begin{align}
+			\Rightarrow g_i(x) = -\frac{1}{2}(\mathbf{x} - \mathbf{\mu}_i)^t\mathbf{\Sigma}_i^{-1}(\mathbf{x} - \mathbf{\mu}_i) - \frac{d}{2}\ln 2\pi - \frac{1}{2}\ln |\mathbf{\Sigma}_i| + \ln P(w_i)\nonumber
+		\end{align}
+		\normalsize
+		\pause
+		For cases that $\mathbf{\Sigma_i} = \mathbf{\sigma}^2\mathbf{I}$ and $\mathbf{\Sigma_i} = \mathbf{\Sigma}$, the discriminant function is linear (i.e. the classifier is a linear machine), and the decision surfaces are hyperplanes defined by $g_i(\mathbf{x}) = g_j(\mathbf{x})$.
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Decision surface for linear machines}
+	\begin{block}{Decision surface of case $\mathbf{\Sigma_i} = \mathbf{\sigma}^2\mathbf{I}$}
+		\pause
+		This implies that features are independent with the same variance.
+		\begin{align}
+			g_i(\mathbf{x}) = -\frac{\|\mathbf{x} - \mathbf{\mu}_i\|^2}{2\sigma^2} + \ln P(w_i) \qquad\\
+			\Rightarrow 
+			g_i(\mathbf{x}) = \mathbf{w}_i^t\mathbf{x} + \mathbf{w}_{i0} \qquad\qquad\\
+			\mathbf{w}_i = \frac{\mathbf{\mu}_i}{\sigma^2}, \quad \mathbf{w}_{i0} = -\frac{1}{2\sigma^2}\mathbf{\mu}_i^t\mathbf{\mu}_i + \ln P(w_i)
+		\end{align}
+		\pause
+		Then the hyperplanes are defined by $g_i(\mathbf{x}) = g_j(\mathbf{x})$, which can be written as
+		\begin{align}
+			\mathbf{w}^t(\mathbf{x} - \mathbf{x}_0) = 0
+		\end{align}
+		\pause
+		\textcolor{red}{How to derive $\mathbf{w}$ and $\mathbf{x}_0$?}
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Decision surface for linear machines}
+	\begin{block}{Decision surface of case $\mathbf{\Sigma_i} = \mathbf{\sigma}^2\mathbf{I}$: deriving $\mathbf{w}$ and $\mathbf{x}_0$ ... }
+		\small 
+		\begin{align}
+			&g_i(\mathbf{x}) = g_j(\mathbf{x})\qquad\qquad\\
+			\uncover<2->{&\Rightarrow \mathbf{w}_i^t\mathbf{x} + \mathbf{w}_{i0} = \mathbf{w}_j^t\mathbf{x} + \mathbf{w}_{j0}\\}
+			\uncover<3->{&\Rightarrow (\mathbf{w}_i - \mathbf{w}_j)^t\mathbf{x} + (\mathbf{w}_{i0} - \mathbf{w}_{j0}) = 0 \\}
+			\uncover<4->{&\Rightarrow (\frac{\mathbf{\mu}_i}{\sigma^2} - \frac{\mathbf{\mu}_j}{\sigma^2})^t\mathbf{x} - \Big(\frac{1}{2\sigma^2}\mathbf{\mu}_i^t\mathbf{\mu}_i - \ln P(w_i)-\frac{1}{2\sigma^2}\mathbf{\mu}_j^t\mathbf{\mu}_j + \ln P(w_j)\Big) =0 \nonumber\\}
+			\uncover<5->{& \Rightarrow (\mathbf{\mu}_i - \mathbf{\mu}_j)^t\mathbf{x} - \Big(\frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)^t(\mathbf{\mu}_i+\mathbf{\mu}_j) - \sigma^2[\ln P(w_i)- \ln P(w_j)] \Big)=0 \nonumber\\}
+			\uncover<6->{& \Rightarrow  (\mathbf{\mu}_i - \mathbf{\mu}_j)^t(\mathbf{x} - \mathbf{x}_0) = 0 \\}
+			\uncover<7->{& \Rightarrow \mathbf{w} = \mathbf{\mu}_i - \mathbf{\mu}_j, \quad \mathbf{x}_0 = \frac{1}{2}(\mathbf{\mu}_i+\mathbf{\mu}_j) - \frac{\sigma^2}{\|\mathbf{\mu}_i - \mathbf{\mu}_j\|^2} \ln \frac{P(w_i)}{P(w_j)} (\mathbf{\mu}_i - \mathbf{\mu}_j).\#\nonumber}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}	
+
+\begin{frame}{3. Decision surface for linear machines}
+	\begin{block}{Decision surface of case $\mathbf{\Sigma_i} = \mathbf{\Sigma}$}
+		\begin{align}
+			 g_i(\mathbf{x}) = -\frac{1}{2}(\mathbf{x} - \mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\mathbf{x} - \mathbf{\mu}_i) + \ln P(w_i) \quad\\
+			\Rightarrow 
+			g_i(\mathbf{x}) = \mathbf{w}_i^t\mathbf{x} + \mathbf{w}_{i0} \qquad\qquad\qquad\\
+			\mathbf{w}_i = \mathbf{\Sigma}^{-1}\mathbf{\mu}_i, \quad \mathbf{w}_{i0} = -\frac{1}{2}\mathbf{\mu}_i^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_i + \ln P(w_i)
+		\end{align}
+		\pause
+		Then the hyperplanes are defined by $g_i(\mathbf{x}) = g_j(\mathbf{x})$, which can be written as
+		\begin{align}
+			\mathbf{w}^t(\mathbf{x} - \mathbf{x}_0) = 0
+		\end{align}
+		\pause
+		\textcolor{red}{How to derive $\mathbf{w}$ and $\mathbf{x}_0$?}
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Decision surface for linear machines}
+	\begin{block}{Decision surface of case $\mathbf{\Sigma_i} = \mathbf{\Sigma}$: deriving $\mathbf{w}$ and $\mathbf{x}_0$ ... }
+		\vspace{-0.1in}
+		\small 
+		\begin{align}
+			&g_i(\mathbf{x}) = g_j(\mathbf{x})\qquad\qquad\\
+			\uncover<2->{&\Rightarrow \mathbf{w}_i^t\mathbf{x} + \mathbf{w}_{i0} = \mathbf{w}_j^t\mathbf{x} + \mathbf{w}_{j0}\\}
+			\uncover<3->{&\Rightarrow (\mathbf{w}_i - \mathbf{w}_j)^t\mathbf{x} + (\mathbf{w}_{i0} - \mathbf{w}_{j0}) = 0 \\}
+			\uncover<4->{&\Rightarrow (\mathbf{\Sigma}^{-1}\mathbf{\mu}_i - \mathbf{\Sigma}^{-1}\mathbf{\mu}_j)^t\mathbf{x} \\}
+			\uncover<5->{&\qquad-\Big(\frac{1}{2}\mathbf{\mu}_i^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_i - \ln P(w_i) -\frac{1}{2}\mathbf{\mu}_j^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_j + \ln P(w_j)\Big) =0 \nonumber\\}
+			\uncover<6->{& \Rightarrow (\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i - \mathbf{\mu}_j))^t\mathbf{x}-\Big(\frac{1}{2}\mathbf{\mu}_i^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_i -\frac{1}{2}\mathbf{\mu}_j^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_j - \ln\frac{P(w_i)}{P(w_j)}\Big) =0 \nonumber\\}
+			\uncover<7->{& \Rightarrow (\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i - \mathbf{\mu}_j))^t\mathbf{x}-\Big(\frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j) - \ln \frac{P(w_i)}{P(w_j)}\Big) =0 \nonumber\\}
+			\uncover<8->{& \Rightarrow  (\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i - \mathbf{\mu}_j))^t(\mathbf{x} - \mathbf{x}_0) = 0 \\}
+			\uncover<9->{& \Rightarrow \mathbf{w} = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_i - \mathbf{\mu}_j), \quad\mathbf{x}_0 = \frac{1}{2}(\mathbf{\mu}_i+\mathbf{\mu}_j) - \frac{\ln [P(w_i)/P(w_j)](\mathbf{\mu}_i - \mathbf{\mu}_j)}{(\mathbf{\mu}_i - \mathbf{\mu}_j)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i - \mathbf{\mu}_j)}.\# \nonumber}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}	
+
+
+\end{document} 
