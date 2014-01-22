@@ -56,6 +56,7 @@
 		\vspace{0.1in}
 		\item<3-> Bayesian estimate: Univariate Gaussian
 		\begin{itemize}
+			\item brief review
 			\item posteriori $p(\mu|\calD)$
 			\item conditional probability density $p(x | w_i, \calD_i)$
 		\end{itemize}
@@ -122,6 +123,7 @@
 		\vspace{0.1in}
 		\item<0> Bayesian estimate: Univariate Gaussian
 		\begin{itemize}
+			\item brief review
 			\item posteriori $p(\mu|\calD)$
 			\item conditional probability density $p(x | w_i, \calD_i)$
 		\end{itemize}
@@ -129,18 +131,50 @@
 \end{frame}
 
 \begin{frame}{ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
-	\begin{block}{Multivariate Gassian Case: unknown $\bmu$ and $\bSig$}
+	\begin{block}{Univariate Gassian Case}
+		ML estimator $\hat{\sigma}^2$ is biased.
 		\begin{align}
-			&\hat{\bmu} = \frac{1}{n}\sum_{k=1}^n\bx_k\\
-			&\hat{\bSig} = \frac{1}{n}\sum_{k=1}^n(\bx_k - \hat{\bmu})(\bx_k - \hat{\bmu})^t
+			E[\hat{\sigma}^2] = E[\frac{1}{n}\sum_{k=1}^{n}(x_k-\hat{\mu})^2] = \frac{n-1}{n}\sigma^2
 		\end{align}
 		\small
-		\begin{itemize}
-			\item $\hat{\bmu}$ is the sample mean. 
-			\item $\hat{\bSig}$ is the arithmetic average of the $n$ matrices $(\bx_k - \hat{\bmu})(\bx_k - \hat{\bmu})^t$.
-		\end{itemize}
+		An elementary unbiased estimator for $\sigma^2$ is given by $\frac{1}{n-1}\sum_{k=1}^n(x_k - \hat{\mu})$.
 		\normalsize
 	\end{block}	
+\end{frame}
+
+\begin{frame}{ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
+	\begin{block}{Univariate Gassian Case}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			E[\frac{1}{n}\sum_{k=1}^{n}(x_k-\hat{\mu})^2] &= E\Big[\frac{1}{n}\sum_{k=1}^{n}(x_k-\frac{1}{n}\sum_{j=1}^n x_j)^2\Big]\\
+			&=E\Big[\frac{1}{n}\sum_{k=1}^{n}\big(x^2_k -\frac{2}{n}x_k\sum_{j=1}^n x_j + \frac{1}{n^2}(\sum_{j=1}^n x_j)^2\big)\Big]\\
+			&=E\Big[\frac{1}{n}\Big(\sum_{k=1}^{n} x^2_k -\frac{2}{n}(\sum_{k=1}^n x_k)^2 + \frac{n}{n^2}(\sum_{k=1}^n x_k)^2\Big)\Big]\\
+			&=E\Big[\frac{1}{n}\Big(\sum_{k=1}^{n} x^2_k -\frac{1}{n}(\sum_{k=1}^n x_k)^2 \Big)\Big] \\
+			&=\frac{1}{n}E[\sum_{k=1}^{n} x^2_k] - \frac{1}{n^2}E[(\sum_{k=1}^n x_k)^2]\\
+			&=E[x^2] - \frac{1}{n^2}E\Big[\sum_{k=1}^n x_k^2 + \sum_{i\neq j}x_i x_j\Big] \\
+			&= E[x^2] - \frac{1}{n^2}E[\sum_{k=1}^n x_k^2] - \frac{1}{n^2}E[\sum_{i\neq j}x_i x_j] \\
+			&= E[x^2] -\frac{1}{n} E[x^2] - \frac{n^2-n}{n^2}E[x_i x_j] = \frac{n-1}{n}\Big(E[x^2] - (E[x])^2\Big)\\
+			& = \frac{n-1}{n} \sigma^2
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<2-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<3-> brief review
+			\item<0> posteriori $p(\mu|\calD)$
+			\item<0> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
 \end{frame}
 
 \end{document} 
