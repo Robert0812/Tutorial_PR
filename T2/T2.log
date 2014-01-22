@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.12.31)  22 JAN 2014 21:58
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.12.31)  22 JAN 2014 23:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1010,6 +1010,14 @@ Overfull \vbox (6.7251pt too high) detected at line 162
 
 ] [14
 
+] [15
+
+] [16
+
+] [17
+
+] [18
+
 ]
 \tf@nav=\write6
 \openout6 = `T2.nav'.
@@ -1020,11 +1028,11 @@ Overfull \vbox (6.7251pt too high) detected at line 162
 \tf@snm=\write8
 \openout8 = `T2.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 180.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 180.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 243.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 243.
  (./T2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 180.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 180.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 243.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 243.
 Package rerunfilecheck Info: File `T2.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1032,13 +1040,13 @@ Package rerunfilecheck Info: File `T2.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 180.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 243.
  ) 
 Here is how much of TeX's memory you used:
- 18812 strings out of 493315
- 364000 string characters out of 6137903
- 459202 words of memory out of 5000000
- 21776 multiletter control sequences out of 15000+600000
+ 18828 strings out of 493315
+ 364140 string characters out of 6137903
+ 460202 words of memory out of 5000000
+ 21784 multiletter control sequences out of 15000+600000
  15512 words of font info for 59 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  49i,16n,59p,430b,559s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1065,11 +1073,12 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2013/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2013/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2013/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on T2.pdf (14 pages, 238998 bytes).
+/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2013/texmf-dist/f
+onts/type1/public/amsfonts/symbols/msam7.pfb>
+Output written on T2.pdf (18 pages, 269147 bytes).
 PDF statistics:
- 503 PDF objects out of 1000 (max. 8388607)
- 445 compressed objects within 5 object streams
- 29 named destinations out of 1000 (max. 500000)
+ 616 PDF objects out of 1000 (max. 8388607)
+ 552 compressed objects within 6 object streams
+ 37 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 

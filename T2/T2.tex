@@ -130,7 +130,7 @@
 	\end{enumerate}
 \end{frame}
 
-\begin{frame}{ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
+\begin{frame}{2. ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
 	\begin{block}{Univariate Gassian Case}
 		ML estimator $\hat{\sigma}^2$ is biased.
 		\begin{align}
@@ -142,7 +142,7 @@
 	\end{block}	
 \end{frame}
 
-\begin{frame}{ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
+\begin{frame}{2. ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
 	\begin{block}{Univariate Gassian Case}
 		\vspace{-0.15in}
 		\tiny
@@ -177,4 +177,67 @@
 	\end{enumerate}
 \end{frame}
 
+\begin{frame}{3.1 Bayesian estimate: brief review}
+	\begin{block}{Bayesian estimate}
+		Given sample set $\calD$, then posteriori for estimation is
+		\begin{align}
+			P(w_i | \bx, \calD) = \frac{p(\bx|w_i, \calD)P(w_i | \calD)}{\sum_{j=1}^c p(\bx | w_i, \calD)P(w_i | \calD)}
+		\end{align}
+		\vspace{-0.15in}
+		\small
+		\begin{itemize}
+			\item consider each class individually: $p(\bx | w_i, \calD) \rightarrow p(\bx | \calD)$
+			\item prior is known $P(w_i | \calD)$ 
+		\end{itemize}
+		Target: estimate posteriori $p(\bx | \calD) \rightarrow p(\bx)$
+		\begin{align}
+			p(\bx|\calD) &= \int p(\bx, \mathbf{\theta}|\calD) d\mathbf{\theta} \\
+			 &= \int p(\bx | \mathbf{\theta}, \calD) p(\mathbf{\theta} | \calD) d\mathbf{\theta} 
+			 = \int p(\bx | \mathbf{\theta}) p(\mathbf{\theta} | \calD) d\mathbf{\theta}
+		\end{align}	
+		\normalsize
+	\end{block}	
+\end{frame}
+
+\begin{frame}{3.2 Bayesian estimate of univariate Gaussian: posteriori $p(\mu|\calD)$}
+	\begin{block}{Bayesian estimate}
+		$P(w_i | \bx, \calD) \Rightarrow p(\bx | w_i, \calD) \Rightarrow p(\bx | \calD) \Rightarrow p(\bx | \mathbf{\theta}) ~\&~ p(\mathbf{\theta} | \calD) $
+		\begin{itemize}
+			\item  $p(\bx | \mathbf{\theta})$ is pre-assumed in form: $p(x|\mu) \sim \mathcal{N}(\mu, \sigma^2)$
+			\item $p(\mathbf{\theta} | \calD)$ is the posteriori: $p(\mu|\calD)$
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Posteriori $p(\mu|\calD)$}
+		\vspace{-0.15in}
+		\begin{align}
+			p(\mu|\calD) &= \frac{p(\calD | \mu) p(\mu)}{\int p(\calD | \mu) p(\mu) d\mu} \\
+			& = \alpha \prod_{k=1}^n p(x_k | \mu)p(\mu)
+		\end{align}
+		where $p(x_k | \mu) \sim \mathcal{N}(\mu, \sigma^2)$, and $p(\mu) \sim \mathcal{N}(\mu_0, \sigma_0^2)$.
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.2 Bayesian estimate of univariate Gaussian: posteriori $p(\mu|\calD)$}
+	\begin{block}{Posteriori $p(\mu|\calD)$}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			p(\mu|\calD) &= \alpha \prod_{k=1}^n p(x_k | \mu)p(\mu)\\
+			&= \alpha \prod_{k=1}^n \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x_k-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_0}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_0}{\sigma_0}\Big)^2\Big]\\
+			&=\alpha' \exp\Big[-\frac{1}{2}\Big(\sum_{k=1}^n(\frac{\mu-x_k}{\sigma})^2 + (\frac{\mu-\mu_0}{\sigma_0})^2\Big)\Big]\\
+			&=\alpha'' \exp\Big[-\frac{1}{2}\Big[(\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2})\mu^2 - 2(\frac{1}{\sigma^2}\sum_{k=1}^n x_k + \frac{\mu_0}{\sigma_0^2})\mu\Big]\Big] \\
+		 	\therefore ~~& p(\mu | \calD) \sim \mathcal{N}(\mu_n, \sigma_n^2), ~i.e.~ p(\mu|\calD) = \frac{1}{\sqrt{2\pi}\sigma_n} \exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]\\
+			\Longrightarrow &\frac{1}{\sigma^2_n} = \frac{n}{\sigma^2} + \frac{1}{\sigma^2_0}, ~ \frac{\mu_n}{\sigma^2_n} = \frac{1}{\sigma^2}\sum_{k=1}^n x_k + \frac{\mu_0}{\sigma^2_0} = \frac{n}{\sigma^2}\hat{\mu}_n + \frac{\mu_0}{\sigma^2_0}\\
+			\Longrightarrow & \mu_n = \Big(\frac{n\sigma^2_0}{n\sigma^2_0 + \sigma^2}\Big)\hat{\mu}_n + \frac{\sigma^2}{\sigma^2_0+\sigma^2}\mu_0, ~ \sigma_0^2 = \frac{\sigma_0^2\sigma^2}{n\sigma^2_0 + \sigma^2}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		test
+	\end{block}
+\end{frame}
 \end{document} 
