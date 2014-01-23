@@ -200,6 +200,22 @@
 	\end{block}	
 \end{frame}
 
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<1-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<1-> brief review
+			\item<2-> posteriori $p(\mu|\calD)$
+			\item<0> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
 \begin{frame}{3.2 Bayesian estimate of univariate Gaussian: posteriori $p(\mu|\calD)$}
 	\begin{block}{Bayesian estimate}
 		$P(w_i | \bx, \calD) \Rightarrow p(\bx | w_i, \calD) \Rightarrow p(\bx | \calD) \Rightarrow p(\bx | \mathbf{\theta}) ~\&~ p(\mathbf{\theta} | \calD) $
@@ -236,6 +252,22 @@
 	\end{block}
 \end{frame}
 
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<1-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<1-> brief review
+			\item<1-> posteriori $p(\mu|\calD)$
+			\item<2-> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
 \begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
 	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
 		\small
@@ -244,27 +276,48 @@
 			&\sim p(x | \calD) \\
 			& = \int p(x|\mu) p(\mu | \calD) d\mu \\
 			& = \int \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]d\mu \nonumber\\
-			& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)\\
-			& \therefore ~~ p(x | \calD) \sim \mathcal{N}(\mu_n, \sigma^2+\sigma^2_n)\\
-			& f(\sigma, \sigma_n) = \int \exp\Big[-\frac{1}{2}\frac{\sigma^2 + \sigma_n^2}{\sigma^2\sigma_n^2}\Big(\mu - \frac{\sigma^2_n x + \sigma^2\mu_n}{\sigma^2 + \sigma^2_n}\Big)^2\Big]d\mu
+			& \textcolor{red}{= \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)}\\
+			& \textcolor{red}{\therefore ~~ p(x | \calD) \sim \mathcal{N}(\mu_n, \sigma^2+\sigma^2_n)}\\
+			& \textcolor{red}{f(\sigma, \sigma_n) = \int \exp\Big[-\frac{1}{2}\frac{\sigma^2 + \sigma_n^2}{\sigma^2\sigma_n^2}\Big(\mu - \frac{\sigma^2_n x + \sigma^2\mu_n}{\sigma^2 + \sigma^2_n}\Big)^2\Big]d\mu}
 		\end{align}
 		\normalsize
 	\end{block}
 \end{frame}
 
 \begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\vspace{-0.1in}
 	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		\vspace{-0.15in}
 		\tiny
 		\begin{align}
-			& p(x|w_i, \calD_i) \\
-			&\sim p(x | \calD) \\
+			& p(x|w_i, \calD_i) \sim p(x | \calD) \\
 			& = \int p(x|\mu) p(\mu | \calD) d\mu \\
-			& = \int \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]d\mu \nonumber\\
-			& =\frac{1}{2\pi\sigma\sigma_n}\int\exp\Big[-\frac{1}{2}\Big(\frac{x^2-2x\mu+\mu^2}{\sigma^2} + \frac{\mu^2-2\mu\mu_n + \mu_n^2}{\sigma_n^2}\Big)\Big]\\
-			& =\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\\
-			%& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)\\
-			& \therefore ~~ p(x | \calD) \sim \mathcal{N}(\mu_n, \sigma^2+\sigma^2_n)\\
-			& f(\sigma, \sigma_n) = \int \exp\Big[-\frac{1}{2}\frac{\sigma^2 + \sigma_n^2}{\sigma^2\sigma_n^2}\Big(\mu - \frac{\sigma^2_n x + \sigma^2\mu_n}{\sigma^2 + \sigma^2_n}\Big)^2\Big]d\mu
+			& = \int \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]d\mu \\
+			& =\frac{1}{2\pi\sigma\sigma_n}\int\exp\Big[-\frac{1}{2}\Big(\frac{x^2-2x\mu+\mu^2}{\sigma^2} + \frac{\mu^2-2\mu\mu_n + \mu_n^2}{\sigma_n^2}\Big)\Big]d\mu\\
+			& =\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\Big(\frac{\mu^2-2x\mu}{\sigma^2} + \frac{\mu^2-2\mu_n\mu}{\sigma^2_n}\Big)\Big]d\mu\\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\Big(\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\mu^2 - 2(\frac{x}{\sigma^2} + \frac{\mu_n}{\sigma_n^2})\mu\Big)\Big]d\mu\\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu^2 - 2\frac{\sigma_n^2\sigma^2}{\sigma_n^2 + \sigma^2}(\frac{x}{\sigma^2} + \frac{\mu_n}{\sigma_n^2})\mu\Big)\Big]d\mu\\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{(\sigma_n^2 x + \sigma^2\mu_n)^2}{\sigma^2_n\sigma^2(\sigma_n^2+\sigma^2)})\Big]f(\sigma, \sigma_n)\\
+			&f(\sigma, \sigma_n) = \int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu - \frac{\sigma_n^2 x + \sigma^2\mu_n}{\sigma^2 + \sigma_n^2}\Big)^2\Big]d\mu \nonumber
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\vspace{-0.1in}
+	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			& p(x | \calD) \\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu^2 - 2\frac{\sigma_n^2\sigma^2}{\sigma_n^2 + \sigma^2}(\frac{x}{\sigma^2} + \frac{\mu_n}{\sigma_n^2})\mu\Big)\Big]d\mu\\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{(\sigma_n^2 x + \sigma^2\mu_n)^2}{\sigma^2_n\sigma^2(\sigma_n^2+\sigma^2)}\Big)\Big]f(\sigma, \sigma_n)\\
+			& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{\sigma_n^2 x^2}{\sigma^2(\sigma_n^2 + \sigma^2)} -\frac{2x\mu_n}{\sigma_n^2 + \sigma^2} - \frac{\sigma^2\mu_n^2}{\sigma^2_n(\sigma_n^2+\sigma^2)}\Big)\Big]f(\sigma, \sigma_n)\\
+			& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma_n^2 + \sigma^2} -\frac{2x\mu_n}{\sigma_n^2 + \sigma^2} + \frac{\mu_n^2}{\sigma_n^2+\sigma^2}\Big)\Big]f(\sigma, \sigma_n)\\
+			& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)\\
+			\vspace{0.3in}
+			&f(\sigma, \sigma_n) = \int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu - \frac{\sigma_n^2 x + \sigma^2\mu_n}{\sigma^2 + \sigma_n^2}\Big)^2\Big]d\mu \nonumber
 		\end{align}
 		\normalsize
 	\end{block}
