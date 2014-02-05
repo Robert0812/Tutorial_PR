@@ -1,0 +1,335 @@
+\documentclass[compress,blue]{beamer}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{mathtools}
+
+\renewcommand\mathfamilydefault{\rmdefault}
+
+
+\usetikzlibrary{shapes.arrows}
+\tikzset{
+    myarrow/.style={
+        draw,
+        fill=red,
+        single arrow,
+        minimum height=3.5ex,
+        single arrow head extend=1ex
+    }
+}
+\newcommand{\arrowup}{%
+\tikz [baseline=-0.5ex]{\node [myarrow,rotate=90] {};}
+}
+\newcommand{\arrowdown}{%
+\tikz [baseline=-1ex]{\node [myarrow,rotate=-90] {};}
+}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bmu}{\mathbf{\mu}}
+\newcommand{\bsig}{\mathbf{\sigma}}
+\newcommand{\bSig}{\mathbf{\Sigma}}
+\newcommand{\calD}{\mathcal{D}}
+
+\usetheme{Warsaw}
+
+\title[ENGG 5202 Pattern Recogntion Tutorial 2]{Tutorial 2: Maximum-Likelihood and \\ Bayesian Parameter Estimation}
+\author{Rui Zhao}
+\institute{rzhao@ee.cuhk.edu.hk}
+\date{Jan. 23, 2014}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\setbeamertemplate{enumerate items}[square]
+\setbeamertemplate{itemize items}[square]
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<1> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item brief review
+			\item posteriori $p(\mu|\calD)$
+			\item conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{1. ML estimate: $\hat{\bSig}$ of multivariate Gaussian }
+	\begin{block}{Multivariate Gassian Case: unknown $\bmu$ and $\bSig$}
+		\begin{align}
+			&\hat{\bmu} = \frac{1}{n}\sum_{k=1}^n\bx_k\\
+			&\hat{\bSig} = \frac{1}{n}\sum_{k=1}^n(\bx_k - \hat{\bmu})(\bx_k - \hat{\bmu})^t
+		\end{align}
+		\small
+		\begin{itemize}
+			\item $\hat{\bmu}$ is the sample mean. 
+			\item $\hat{\bSig}$ is the arithmetic average of the $n$ matrices $(\bx_k - \hat{\bmu})(\bx_k - \hat{\bmu})^t$.
+		\end{itemize}
+		\normalsize
+	\end{block}	
+\end{frame}
+
+\begin{frame}{1. ML estimate: $\hat{\bSig}$ of multivariate Gaussian }
+	\begin{block}{Multivariate normal density}
+		\begin{align}
+			p(\bx ~|~ \bmu,~ \bSig) = \frac{1}{(2\pi)^{d/2}|\bSig|^{1/2}} \exp\Big[-\frac{1}{2}(\bx-\bmu)^t\bSig^{-1}(\bx-\bmu)\Big]
+		\end{align}
+		\small
+		\pause
+		Draw $\bx_1, \bx_2, \cdots, \bx_n$ independently from $p(\bx~|~\bmu,~\bSig)$, and the joint density (likelihood) is: 
+		\begin{align}
+			&p(\bx_1, \bx_2, \cdots, \bx_n~|~\bmu,\bSig) = \\
+			&\qquad\frac{1}{(2\pi)^{nd/2}|\bSig|^{n/2}} \exp\Big[-\frac{1}{2}\sum_{k=1}^{n}(\bx_k-\bmu)^t\bSig^{-1}(\bx_k-\bmu)\Big]
+		\end{align}
+		\pause
+		Log-likelihood $l(\bmu, ~\bSig)$ is 
+		\begin{align}
+			&l(\bmu,\bSig) = -\frac{nd}{2}\ln(2\pi)-\frac{n}{2}\ln|\bSig| -\frac{1}{2}\sum_{k=1}^{n}(\bx_k-\bmu)^t\bSig^{-1}(\bx_k-\bmu)
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{1. ML estimate: $\hat{\bSig}$ of multivariate Gaussian }
+	\begin{block}{Multivariate normal density}
+		\small
+		Let $A = \bSig^{-1}$
+		\begin{align}
+			\uncover<2->{&l(\bmu,\bSig) = -\frac{nd}{2}\ln(2\pi)-\frac{n}{2}\ln|\bSig| -\frac{1}{2}\sum_{k=1}^{n}(\bx_k-\bmu)^t\bSig^{-1}(\bx_k-\bmu) \\} 
+			\uncover<3->{&l(\bmu,\bSig) = -\frac{nd}{2}\ln(2\pi)+\frac{n}{2}\ln \mathbf{A} -\frac{1}{2}\sum_{k=1}^{n}(\bx_k-\bmu)^t \mathbf{A}(\bx_k-\bmu)\\}
+			\uncover<4->{& \frac{\partial l(\bmu,\bSig)}{\partial \mathbf{A} } = \frac{n}{2} \mathbf{A}^{-1} - \frac{1}{2} \sum_{k=1}^{n} (\bx_k-\bmu)(\bx_k-\bmu)^t = 0}
+		\end{align}
+		\uncover<5->{Replace $\mathbf{A}$ by $\bSig^{-1}$ }
+		\begin{align}
+			\uncover<6->{\hat{\bSig} = \frac{1}{n} \sum_{k=1}^n (\bx_k-\hat{\bmu})(\bx_k-\hat{\bmu})^t, ~~ (\hat{\bmu} = \frac{1}{n}\sum_{k=1}^n \bx_k)}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<2-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<0> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item brief review
+			\item posteriori $p(\mu|\calD)$
+			\item conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{2. ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
+	\begin{block}{Univariate Gassian Case}
+		ML estimator $\hat{\sigma}^2$ is biased.
+		\pause
+		\begin{align}
+			E[\hat{\sigma}^2] = E[\frac{1}{n}\sum_{k=1}^{n}(x_k-\hat{\mu})^2] = \frac{n-1}{n}\sigma^2
+		\end{align}
+		\small
+		\pause
+		An elementary unbiased estimator for $\sigma^2$ is given by $\frac{1}{n-1}\sum_{k=1}^n(x_k - \hat{\mu})$.
+		\normalsize
+	\end{block}	
+\end{frame}
+
+\begin{frame}{2. ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian}
+	\begin{block}{Univariate Gassian Case}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			\uncover<2->{E[\frac{1}{n}\sum_{k=1}^{n}(x_k-\hat{\mu})^2] &= E\Big[\frac{1}{n}\sum_{k=1}^{n}(x_k-\frac{1}{n}\sum_{j=1}^n x_j)^2\Big]\\}
+			\uncover<3->{&=E\Big[\frac{1}{n}\sum_{k=1}^{n}\big(x^2_k -\frac{2}{n}x_k\sum_{j=1}^n x_j + \frac{1}{n^2}(\sum_{j=1}^n x_j)^2\big)\Big]\\}
+			\uncover<4->{&=E\Big[\frac{1}{n}\Big(\sum_{k=1}^{n} x^2_k -\frac{2}{n}(\sum_{k=1}^n x_k)^2 + \frac{n}{n^2}(\sum_{k=1}^n x_k)^2\Big)\Big]\\}
+			\uncover<5->{&=E\Big[\frac{1}{n}\Big(\sum_{k=1}^{n} x^2_k -\frac{1}{n}(\sum_{k=1}^n x_k)^2 \Big)\Big] \\}
+			\uncover<6->{&=\frac{1}{n}E[\sum_{k=1}^{n} x^2_k] - \frac{1}{n^2}E[(\sum_{k=1}^n x_k)^2]\\}
+			\uncover<7->{&=E[x^2] - \frac{1}{n^2}E\Big[\sum_{k=1}^n x_k^2 + \sum_{i\neq j}x_i x_j\Big] \\}
+			\uncover<8->{&= E[x^2] - \frac{1}{n^2}E[\sum_{k=1}^n x_k^2] - \frac{1}{n^2}E[\sum_{i\neq j}x_i x_j] \\}
+			\uncover<9->{&= E[x^2] -\frac{1}{n} E[x^2] - \frac{n^2-n}{n^2}E[x_i x_j] = \frac{n-1}{n}\Big(E[x^2] - (E[x])^2\Big)\\}
+			\uncover<10->{& = \frac{n-1}{n} \sigma^2}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<2-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<3-> brief review
+			\item<0> posteriori $p(\mu|\calD)$
+			\item<0> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{3.1 Bayesian estimate: brief review}
+	\begin{block}{Bayesian estimate}
+		Given sample set $\calD$, then posteriori for estimation is
+		\pause
+		\begin{align}
+			P(w_i | \bx, \calD) = \frac{p(\bx|w_i, \calD)P(w_i | \calD)}{\sum_{j=1}^c p(\bx | w_i, \calD)P(w_i | \calD)}
+		\end{align}
+		\vspace{-0.15in}
+		\small
+		\begin{itemize}
+			\item<3-> consider each class individually: $p(\bx | w_i, \calD) \rightarrow p(\bx | \calD)$
+			\item<4-> prior is known $P(w_i | \calD)$ 
+		\end{itemize}
+		\uncover<5->{
+		Goal: estimate posteriori $p(\bx | \calD) \rightarrow p(\bx)$
+		}
+		\begin{align}
+			\uncover<6->{p(\bx|\calD) &= \int p(\bx, \mathbf{\theta}|\calD) d\mathbf{\theta} \\}
+			\uncover<7->{ &= \int p(\bx | \mathbf{\theta}, \calD) p(\mathbf{\theta} | \calD) d\mathbf{\theta} 
+			 = \int p(\bx | \mathbf{\theta}) p(\mathbf{\theta} | \calD) d\mathbf{\theta}}
+		\end{align}	
+		\normalsize
+	\end{block}	
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<1-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<1-> brief review
+			\item<2-> posteriori $p(\mu|\calD)$
+			\item<0> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{3.2 Bayesian estimate of univariate Gaussian: posteriori $p(\mu|\calD)$}
+	\begin{block}{Bayesian estimate}
+		$P(w_i | \bx, \calD) \Rightarrow p(\bx | w_i, \calD) \Rightarrow p(\bx | \calD) \Rightarrow p(\bx | \mathbf{\theta}) ~\&~ p(\mathbf{\theta} | \calD) $
+		\begin{itemize}
+			\item<2->  $p(\bx | \mathbf{\theta})$ is pre-assumed in form: $p(x|\mu) \sim \mathcal{N}(\mu, \sigma^2)$
+			\item<3-> $p(\mathbf{\theta} | \calD)$ is the posteriori: $p(\mu|\calD)$
+		\end{itemize}
+	\end{block}
+	\uncover<4->{
+	\begin{block}{Posteriori $p(\mu|\calD)$ of univariate Gaussian}
+	}
+		\vspace{-0.15in}
+		\begin{align}
+			\uncover<5->{p(\mu|\calD) &= \frac{p(\calD | \mu) p(\mu)}{\int p(\calD | \mu) p(\mu) d\mu} \\
+			& = \alpha \prod_{k=1}^n p(x_k | \mu)p(\mu)}
+		\end{align}
+		\uncover<6->{
+		where $p(x_k | \mu) \sim \mathcal{N}(\mu, \sigma^2)$, and $p(\mu) \sim \mathcal{N}(\mu_0, \sigma_0^2)$.
+		}
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.2 Bayesian estimate of univariate Gaussian: posteriori $p(\mu|\calD)$}
+	\begin{block}{Posteriori $p(\mu|\calD)$ of univariate Gaussian}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			p(\mu|\calD) &= \alpha \prod_{k=1}^n p(x_k | \mu)p(\mu)\\
+			\uncover<2->{&= \alpha \prod_{k=1}^n \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x_k-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_0}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_0}{\sigma_0}\Big)^2\Big]\\}
+			\uncover<3->{&=\alpha' \exp\Big[-\frac{1}{2}\Big(\sum_{k=1}^n(\frac{\mu-x_k}{\sigma})^2 + (\frac{\mu-\mu_0}{\sigma_0})^2\Big)\Big]\\}
+			\uncover<4->{&=\alpha'' \exp\Big[-\frac{1}{2}\Big[(\frac{n}{\sigma^2} + \frac{1}{\sigma_0^2})\mu^2 - 2(\frac{1}{\sigma^2}\sum_{k=1}^n x_k + \frac{\mu_0}{\sigma_0^2})\mu\Big]\Big] \\}
+		 	\uncover<5->{\therefore ~~& \textcolor{red}{p(\mu | \calD) \sim \mathcal{N}(\mu_n, \sigma_n^2), ~i.e.~ p(\mu|\calD) = \frac{1}{\sqrt{2\pi}\sigma_n} \exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]}\\}
+			\uncover<6->{\Longrightarrow &\frac{1}{\sigma^2_n} = \frac{n}{\sigma^2} + \frac{1}{\sigma^2_0}, ~ \frac{\mu_n}{\sigma^2_n} = \frac{1}{\sigma^2}\sum_{k=1}^n x_k + \frac{\mu_0}{\sigma^2_0} = \frac{n}{\sigma^2}\hat{\mu}_n + \frac{\mu_0}{\sigma^2_0}\\}
+			\uncover<7->{\Longrightarrow & \textcolor{red}{\mu_n = \Big(\frac{n\sigma^2_0}{n\sigma^2_0 + \sigma^2}\Big)\hat{\mu}_n + \frac{\sigma^2}{\sigma^2_0+\sigma^2}\mu_0, ~ \sigma_n^2 = \frac{\sigma_0^2\sigma^2}{n\sigma^2_0 + \sigma^2}}}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-> ML estimate: $\hat{\bSig}$ of multivariate Gaussian 
+		\vspace{0.1in}
+		\item<1-> ML estimate bias: $\hat{\sigma}^2$ of univariate Gaussian
+		\vspace{0.1in}
+		\item<1-> Bayesian estimate: Univariate Gaussian
+		\begin{itemize}
+			\item<1-> brief review
+			\item<1-> posteriori $p(\mu|\calD)$
+			\item<2-> conditional probability density $p(x | w_i, \calD_i)$
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		\small
+		\begin{align}
+			& p(x|w_i, \calD_i) \\
+			&\sim p(x | \calD) \\
+			\uncover<2->{& = \int p(x|\mu) p(\mu | \calD) d\mu \\}
+			\uncover<3->{& = \int \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]d\mu \nonumber\\}
+			\uncover<4->{& \textcolor{red}{= \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)}\\}
+			\uncover<5->{& \textcolor{red}{\therefore ~~ p(x | \calD) \sim \mathcal{N}(\mu_n, \sigma^2+\sigma^2_n)}\\}
+			\uncover<6->{& \textcolor{red}{f(\sigma, \sigma_n) = \int \exp\Big[-\frac{1}{2}\frac{\sigma^2 + \sigma_n^2}{\sigma^2\sigma_n^2}\Big(\mu - \frac{\sigma^2_n x + \sigma^2\mu_n}{\sigma^2 + \sigma^2_n}\Big)^2\Big]d\mu}}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\vspace{-0.1in}
+	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			& p(x|w_i, \calD_i) \sim p(x | \calD) \\
+			\uncover<2->{& = \int p(x|\mu) p(\mu | \calD) d\mu \\}
+			\uncover<3->{& = \int \frac{1}{\sqrt{2\pi}\sigma}\exp\Big[-\frac{1}{2}\Big(\frac{x-\mu}{\sigma}\Big)^2\Big]\frac{1}{\sqrt{2\pi}\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{\mu-\mu_n}{\sigma_n}\Big)^2\Big]d\mu \\}
+			\uncover<4->{& =\frac{1}{2\pi\sigma\sigma_n}\int\exp\Big[-\frac{1}{2}\Big(\frac{x^2-2x\mu+\mu^2}{\sigma^2} + \frac{\mu^2-2\mu\mu_n + \mu_n^2}{\sigma_n^2}\Big)\Big]d\mu\\}
+			\uncover<5->{& =\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\Big(\frac{\mu^2-2x\mu}{\sigma^2} + \frac{\mu^2-2\mu_n\mu}{\sigma^2_n}\Big)\Big]d\mu\\}
+			\uncover<6->{&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\Big(\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\mu^2 - 2(\frac{x}{\sigma^2} + \frac{\mu_n}{\sigma_n^2})\mu\Big)\Big]d\mu\\}
+			\uncover<7->{&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2})\Big]\int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu^2 - 2\frac{\sigma_n^2 x + \sigma^2\mu_n}{\sigma_n^2 + \sigma^2}\mu\Big)\Big]d\mu\nonumber\\}
+			\uncover<8->{&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{(\sigma_n^2 x + \sigma^2\mu_n)^2}{\sigma^2_n\sigma^2(\sigma_n^2+\sigma^2)})\Big]f(\sigma, \sigma_n)\\}
+			\uncover<9->{&f(\sigma, \sigma_n) = \int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu - \frac{\sigma_n^2 x + \sigma^2\mu_n}{\sigma^2 + \sigma_n^2}\Big)^2\Big]d\mu \nonumber}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}{3.3 Bayesian estimate of univariate Gaussian: conditional probability density $p(x | w_i, \calD_i)$}
+	\vspace{-0.1in}
+	\begin{block}{Conditional probability density $p(x | w_i, \calD_i)$}
+		\vspace{-0.15in}
+		\tiny
+		\begin{align}
+			& p(x | \calD) \\
+			&=\frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{(\sigma_n^2 x + \sigma^2\mu_n)^2}{\sigma^2_n\sigma^2(\sigma_n^2+\sigma^2)}\Big)\Big]f(\sigma, \sigma_n)\\
+			\uncover<2->{& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma^2}+\frac{\mu_n^2}{\sigma_n^2} - \frac{\sigma_n^2 x^2}{\sigma^2(\sigma_n^2 + \sigma^2)} -\frac{2x\mu_n}{\sigma_n^2 + \sigma^2} - \frac{\sigma^2\mu_n^2}{\sigma^2_n(\sigma_n^2+\sigma^2)}\Big)\Big]f(\sigma, \sigma_n)\\}
+			\uncover<3->{& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\Big(\frac{x^2}{\sigma_n^2 + \sigma^2} -\frac{2x\mu_n}{\sigma_n^2 + \sigma^2} + \frac{\mu_n^2}{\sigma_n^2+\sigma^2}\Big)\Big]f(\sigma, \sigma_n)\\}
+			\uncover<4->{& = \frac{1}{2\pi\sigma\sigma_n}\exp\Big[-\frac{1}{2}\frac{(x-\mu_n)^2}{\sigma^2+\sigma^2_n}\Big]f(\sigma, \sigma_n)\\}
+			\vspace{0.3in}\\
+			\uncover<1->{&f(\sigma, \sigma_n) = \int\exp\Big[-\frac{1}{2}\frac{\sigma_n^2 + \sigma^2}{\sigma_n^2\sigma^2}\Big(\mu - \frac{\sigma_n^2 x + \sigma^2\mu_n}{\sigma^2 + \sigma_n^2}\Big)^2\Big]d\mu \nonumber}
+		\end{align}
+		\normalsize
+	\end{block}
+\end{frame}
+
+\end{document} 
