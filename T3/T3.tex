@@ -151,5 +151,31 @@
 	\end{enumerate}
 \end{frame}
 
+\begin{frame}{3. Exercises}
+	\begin{block}{Chapter 4. Problem 35}
+		Consider two normal distribution with arbitrary but equal convariances. Prove that the Fisher linear discriminant, for suitable threshold, can be derived from the negative of the log-likelihood ratio. 
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Exercises}
+	\textbf{Prove}. 
+	\begin{itemize}
+		\item Recall normal distribution. 
+		\begin{align}
+			p(\mathbf{x}|\mathbf{w}_i) = \frac{1}{(2\pi)^{d/2}|\mathbf{\Sigma}|^{1/2}} \exp\Big[-\frac{1}{2}(\mathbf{x}-\mathbf{\mu}_i)^t\mathbf{\Sigma}_i^{-1}(\mathbf{x}-\mathbf{\mu}_i)\Big] \nonumber
+		\end{align}
+		\item Negative likelihood ratio.
+		\scriptsize
+		\begin{align}
+			&-\ln \frac{p(\mathbf{x}|\mathbf{w}_i)}{p(\mathbf{x}|\mathbf{w}_j)} \nonumber\\
+			&= \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_i) - \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_j)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_j)  \nonumber\\
+			&= (\mathbf{\mu}_j - \mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\bx - \frac{\mathbf{\mu}_i+\mathbf{\mu}_j}{2})\\
+			&= \big[\mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)\big]^t \bx + \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)^{-1}\\
+			&=\mathbf{w}^t\bx + w_0 
+		\end{align}
+		We obtain the FLD projection function $w = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)$, and the threshold is $w_0 = \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)^{-1}$. \#
+		\normalsize
+	\end{itemize}
+\end{frame}
 
 \end{document} 
