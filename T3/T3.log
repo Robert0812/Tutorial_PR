@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Arch Linux) (format=pdflatex 2013.11.11)  5 FEB 2014 15:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Arch Linux) (format=pdflatex 2013.11.11)  5 FEB 2014 17:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -795,20 +795,20 @@ Package: beamercolorthemewhale 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )) (./T3.aux)
 \openout1 = `T3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
+LaTeX Font Info:    ... okay on input line 41.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -874,7 +874,7 @@ e
 ))
 ABD: EveryShipout initializing macros
 \AtBeginShipoutBox=\box57
-Package hyperref Info: Link coloring OFF on input line 40.
+Package hyperref Info: Link coloring OFF on input line 41.
 
 (/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -884,9 +884,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count172
 )
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
+LaTeX Info: Redefining \ref on input line 41.
+LaTeX Info: Redefining \pageref on input line 41.
+LaTeX Info: Redefining \nameref on input line 41.
  (./T3.out)
 (./T3.out)
 \@outlinefile=\write5
@@ -917,11 +917,11 @@ Dictionary: translator-numbers-dictionary, Language: English
 tionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \includegraphics on input line 40.
+LaTeX Info: Redefining \includegraphics on input line 41.
  (./T3.nav)
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 44.
+(Font)              size <5> substituted on input line 45.
 
 [1
 
@@ -947,6 +947,19 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ] [7
 
+] [8
+
+] [9
+
+]
+[10
+
+] [11
+
+] [12
+
+] [13
+
 ]
 \tf@nav=\write6
 \openout6 = `T3.nav'.
@@ -957,11 +970,11 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@snm=\write8
 \openout8 = `T3.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 101.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 101.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 155.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 155.
  (./T3.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 101.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 101.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 155.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 155.
 Package rerunfilecheck Info: File `T3.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -969,28 +982,30 @@ Package rerunfilecheck Info: File `T3.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 101.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 155.
  ) 
 Here is how much of TeX's memory you used:
- 18726 strings out of 493311
- 357726 string characters out of 6143649
- 445197 words of memory out of 5000000
- 21714 multiletter control sequences out of 15000+600000
- 10729 words of font info for 40 fonts, out of 8000000 for 9000
+ 18749 strings out of 493311
+ 357929 string characters out of 6143649
+ 445203 words of memory out of 5000000
+ 21724 multiletter control sequences out of 15000+600000
+ 11023 words of font info for 41 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  49i,16n,59p,430b,559s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-dist/font
 s/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/
-share/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb>
-Output written on T3.pdf (7 pages, 101300 bytes).
+r10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on T3.pdf (13 pages, 142756 bytes).
 PDF statistics:
- 256 PDF objects out of 1000 (max. 8388607)
- 222 compressed objects within 3 object streams
- 15 named destinations out of 1000 (max. 500000)
+ 428 PDF objects out of 1000 (max. 8388607)
+ 384 compressed objects within 4 object streams
+ 27 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 

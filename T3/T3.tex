@@ -27,6 +27,7 @@
 \newcommand{\argmin}{\operatornamewithlimits{argmin}}
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
 \newcommand{\bw}{\mathbf{w}}
 \newcommand{\bS}{\mathbf{S}}
 
@@ -49,15 +50,60 @@
 \begin{frame}{Outline}
 \setbeamercovered{transparent}
 	\begin{enumerate}
-		\item<1-2> Generalized Rayleigh Quotient 
+		\item<1-2> Lagrange Optimization
 		\vspace{0.1in}
-		\item<1> Lagrange Optimization
+		\item<1> Generalized Rayleigh Quotient 
 		\vspace{0.1in}
 		\item<1> Exercises 
 	\end{enumerate}
 \end{frame}
 
-\begin{frame}{1. Generalized Rayleigh Quotient }
+\begin{frame}{1. Lagrange Optimization}
+	Constrained optimization problem:
+	\begin{align}
+		\max_{\bx} ~&~ f(\bx), \\
+		s.t. ~&~ g(\bx) = 0.
+	\end{align}
+	The solution can often be found by Lagrangian method. The Lagrangian is defined as:
+	\begin{align}
+		L(\bx, \lambda) = f(\bx) + \lambda g(\bx).
+	\end{align}
+\end{frame}
+
+\begin{frame}{1. Lagrange Optimization}
+	\textbf{Lagrangian Sufficiency Theorem}: Suppose there exist $\bx^* \in \bX$ and $\lambda^*$, such that $\bx^*$ maximize $L(\bx, \lambda^*)$ over all $\bx \in \bX$, and $g(\bx^*) = 0$. Then $\bx^*$ solves the optimization problem. \\
+	\vspace{0.1in}
+	\textbf{Proof}. 
+	\begin{align}
+		& \max_{\bx\in\bX, ~g(\bx) = 0} ~f(\bx)\\
+		=& \max_{\bx\in\bX, ~g(\bx) = 0} ~[f(\bx) + \lambda^* g(\bx)] \\
+		\leq &~~~~ \max_{\bx\in\bX} ~[f(\bx) + \lambda^* g(\bx)] \\
+		= & ~~~~ ~[f(\bx^*) + \lambda^* g(\bx^*)] \\
+		= & ~~~~ ~ f(\bx^*)
+	\end{align} 
+\end{frame}
+
+\begin{frame}{1. Lagrange Optimization}
+	\textbf{Solve Lagrange Optimization}: solve the unconstrained problem by taking the derivative w.r.t. $\bx$ and $\lambda$:
+	\begin{align}
+		&\frac{\partial L(\bx, \lambda)}{\partial \bx} = \frac{\partial f(\bx)}{\partial \bx} + \lambda\frac{\partial g(\bx)}{\partial \bx} = 0 \\
+		&\frac{\partial L(\bx, \lambda)}{\partial \lambda} = 0 \\
+		&g(\bx) = 0
+	\end{align}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> Lagrange Optimization
+		\vspace{0.1in}
+		\item<2> Generalized Rayleigh Quotient 
+		\vspace{0.1in}
+		\item<0> Exercises 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{2. Generalized Rayleigh Quotient }
 	\begin{block}{Fisher Criterion}
 		\begin{align}
 			J(\bw) = \frac{\bw^t  \bS_B \bw}{\bw^t \bS_W \bw}
@@ -70,7 +116,7 @@
 	\end{block}	
 \end{frame}
 
-\begin{frame}{1. Generalized Rayleigh Quotient}
+\begin{frame}{2. Generalized Rayleigh Quotient}
 	Maximizing $J(\bw)$ is equivalent to 
 	\begin{align}
 		\max_{\bw} ~~& \bw^t \bS_B \bw \\
@@ -79,7 +125,7 @@
 	which can be solved using Lagrange multipliers.
 \end{frame}
 
-\begin{frame}{1. Generalized Rayleigh Quotient}
+\begin{frame}{2. Generalized Rayleigh Quotient}
 	Define the 	Lagrangian:
 	\begin{align}
 		L = \bw^t\bS_B\bw - \lambda (\bw^t \bS_W \bw - K)
@@ -94,8 +140,16 @@
 	\end{align}
 \end{frame}
 
-\begin{frame}{2. Lagrange Optimization}
-	
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> Lagrange Optimization
+		\vspace{0.1in}
+		\item<1-2> Generalized Rayleigh Quotient 
+		\vspace{0.1in}
+		\item<2> Exercises 
+	\end{enumerate}
 \end{frame}
+
 
 \end{document} 
