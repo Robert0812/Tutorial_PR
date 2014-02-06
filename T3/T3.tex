@@ -33,7 +33,7 @@
 
 \usetheme{Warsaw}
 
-\title[ENGG 5202 Pattern Recogntion Tutorial 3]{Tutorial 3: Dimensionality Reduction}
+\title[ENGG 5202 Pattern Recognition Tutorial 3]{Tutorial 3: Dimensionality Reduction}
 \author{Rui Zhao}
 \institute{rzhao@ee.cuhk.edu.hk}
 \date{Feb. 6, 2014}
@@ -86,8 +86,10 @@
 \begin{frame}{1. Lagrange Optimization}
 	\textbf{Solve Lagrange Optimization}: solve the unconstrained problem by taking the derivative w.r.t. $\bx$ and $\lambda$:
 	\begin{align}
-		&\frac{\partial L(\bx, \lambda)}{\partial \bx} = \frac{\partial f(\bx)}{\partial \bx} + \lambda\frac{\partial g(\bx)}{\partial \bx} = 0 \\
+		&\frac{\partial L(\bx, \lambda)}{\partial \bx}  = 0 \\
 		&\frac{\partial L(\bx, \lambda)}{\partial \lambda} = 0 \\
+		&or \\
+		&\frac{\partial f(\bx)}{\partial \bx} + \lambda\frac{\partial g(\bx)}{\partial \bx} = 0\\
 		&g(\bx) = 0
 	\end{align}
 \end{frame}
@@ -140,6 +142,23 @@
 	\end{align}
 \end{frame}
 
+\begin{frame}{2. Generalized Rayleigh Quotient}
+	Generalized eigenvalue problem:
+	\begin{align}
+		\bS^{-1}_W\bS_B\bw = \lambda\bw
+	\end{align}
+	\vspace{-0.2in}
+	\begin{itemize}
+		\item $\bS_B\bw = (\bar{\bx}_1 - \bar{\bx}_2)(\bar{\bx}_1 - \bar{\bx}_2)^t\bw = (\bar{\bx}_1 - \bar{\bx}_2)a$ is aways the direction $(\bar{\bx}_1 - \bar{\bx}_2)$. Thus $\bw^* = \bS^{-1}_W(\bar{\bx}_1 - \bar{\bx}_2)$.
+		\item For an optimal $\bw^*$, $\bw^{*t}\bS_B\bw^* = \lambda\bw^{*t}\bS_W\bw^{*} = \lambda K$, $J(\bw)$ is maximized by the largest eigenvalue. 
+		\begin{itemize}
+			\item $\bS_W$ is invertible. $\bw^*$ is the eigenvector corresponding to the largest eigenvalue of $\bS^{-1}_W\bS_B$.
+			\item $\bS_W$ is not invertible. $\bw^*$ is the eigenvector corresponding to the largest eigenvalue of $[\bS^{-1}_W+\alpha I]^{-1}\bS_B$, which is equivalent to a new regularized problem:\\
+			$$\max_{\bw}~ \bw^t\bS_B\bw, ~s.t.~ \bw^t\bS_W\bw = K, ~ \|\bw\|=L$$
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
 \begin{frame}{Outline}
 \setbeamercovered{transparent}
 	\begin{enumerate}
@@ -170,7 +189,7 @@
 			&-\ln \frac{p(\mathbf{x}|\mathbf{w}_i)}{p(\mathbf{x}|\mathbf{w}_j)} \nonumber\\
 			&= \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_i) - \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_j)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_j)  \nonumber\\
 			&= (\mathbf{\mu}_j - \mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\bx - \frac{\mathbf{\mu}_i+\mathbf{\mu}_j}{2})\\
-			&= \big[\mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)\big]^t \bx + \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)^{-1}\\
+			&= \big[\mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)\big]^t \bx + \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)\\
 			&=\mathbf{w}^t\bx + w_0 
 		\end{align}
 		We obtain the FLD projection function $w = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)$, and the threshold is $w_0 = \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)^{-1}$. \#
