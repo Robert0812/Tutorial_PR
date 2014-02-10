@@ -1,0 +1,200 @@
+\documentclass[compress,blue]{beamer}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{mathtools}
+
+\renewcommand\mathfamilydefault{\rmdefault}
+
+
+\usetikzlibrary{shapes.arrows}
+\tikzset{
+    myarrow/.style={
+        draw,
+        fill=red,
+        single arrow,
+        minimum height=3.5ex,
+        single arrow head extend=1ex
+    }
+}
+\newcommand{\arrowup}{%
+\tikz [baseline=-0.5ex]{\node [myarrow,rotate=90] {};}
+}
+\newcommand{\arrowdown}{%
+\tikz [baseline=-1ex]{\node [myarrow,rotate=-90] {};}
+}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bS}{\mathbf{S}}
+
+\usetheme{Warsaw}
+
+\title[ENGG 5202 Pattern Recognition Tutorial 4]{Tutorial 4: Expectation-Maximization}
+\author{Rui Zhao}
+\institute{rzhao@ee.cuhk.edu.hk}
+\date{Feb. 13, 2014}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\setbeamertemplate{enumerate items}[square]
+\setbeamertemplate{itemize items}[square]
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> Lagrange Optimization
+		\vspace{0.1in}
+		\item<1> Generalized Rayleigh Quotient 
+		\vspace{0.1in}
+		\item<1> Exercises 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{1. Lagrange Optimization}
+	Constrained optimization problem:
+	\begin{align}
+		\max_{\bx} ~&~ f(\bx), \\
+		s.t. ~&~ g(\bx) = 0.
+	\end{align}
+	The solution can often be found by Lagrangian method. The Lagrangian is defined as:
+	\begin{align}
+		L(\bx, \lambda) = f(\bx) + \lambda g(\bx).
+	\end{align}
+\end{frame}
+
+\begin{frame}{1. Lagrange Optimization}
+	\textbf{Lagrangian Sufficiency Theorem}: Suppose there exist $\bx^* \in \bX$ and $\lambda^*$, such that $\bx^*$ maximize $L(\bx, \lambda^*)$ over all $\bx \in \bX$, and $g(\bx^*) = 0$. Then $\bx^*$ solves the optimization problem. \\
+	\vspace{0.1in}
+	\textbf{Proof}. 
+	\begin{align}
+		& \max_{\bx\in\bX, ~g(\bx) = 0} ~f(\bx)\\
+		=& \max_{\bx\in\bX, ~g(\bx) = 0} ~[f(\bx) + \lambda^* g(\bx)] \\
+		\leq &~~~~ \max_{\bx\in\bX} ~[f(\bx) + \lambda^* g(\bx)] \\
+		= & ~~~~ ~[f(\bx^*) + \lambda^* g(\bx^*)] \\
+		= & ~~~~ ~ f(\bx^*)
+	\end{align} 
+\end{frame}
+
+\begin{frame}{1. Lagrange Optimization}
+	\textbf{Solve Lagrange Optimization}: solve the unconstrained problem by taking the derivative w.r.t. $\bx$ and $\lambda$:
+	\begin{align}
+		&\frac{\partial L(\bx, \lambda)}{\partial \bx}  = 0 \\
+		&\frac{\partial L(\bx, \lambda)}{\partial \lambda} = 0 \\
+		&or \\
+		&\frac{\partial f(\bx)}{\partial \bx} + \lambda\frac{\partial g(\bx)}{\partial \bx} = 0\\
+		&g(\bx) = 0
+	\end{align}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> Lagrange Optimization
+		\vspace{0.1in}
+		\item<2> Generalized Rayleigh Quotient 
+		\vspace{0.1in}
+		\item<0> Exercises 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{2. Generalized Rayleigh Quotient }
+	\begin{block}{Fisher Criterion}
+		\begin{align}
+			J(\bw) = \frac{\bw^t  \bS_B \bw}{\bw^t \bS_W \bw}
+		\end{align}
+		$J(\bw)$ is the generalized Rayleigh quotient. A vector $\bw$ that maximizes $J(\cdot)$ must satisfy 
+		\begin{align}
+			\bS_B\bw = \lambda\bS_W\bw
+		\end{align}
+		for some constant $\lambda$.
+	\end{block}	
+\end{frame}
+
+\begin{frame}{2. Generalized Rayleigh Quotient}
+	Maximizing $J(\bw)$ is equivalent to 
+	\begin{align}
+		\max_{\bw} ~~& \bw^t \bS_B \bw \\
+		s.t. ~~~& \bw^t \bS_W \bw = K
+	\end{align}
+	which can be solved using Lagrange multipliers.
+\end{frame}
+
+\begin{frame}{2. Generalized Rayleigh Quotient}
+	Define the 	Lagrangian:
+	\begin{align}
+		L = \bw^t\bS_B\bw - \lambda (\bw^t \bS_W \bw - K)
+	\end{align} 
+	Maximize with respect to $\bw$:
+	\begin{align}
+		\nabla_{\bw}L = 2(\bS_B - \lambda\bS_W)\bw = 0
+	\end{align}
+	To obtain the solution:
+	\begin{align}
+		\bS_B\bw = \lambda \bS_W\bw
+	\end{align}
+\end{frame}
+
+\begin{frame}{2. Generalized Rayleigh Quotient}
+	Generalized eigenvalue problem:
+	\begin{align}
+		\bS^{-1}_W\bS_B\bw = \lambda\bw
+	\end{align}
+	\vspace{-0.2in}
+	\begin{itemize}
+		\item $\bS_B\bw = (\bar{\bx}_1 - \bar{\bx}_2)(\bar{\bx}_1 - \bar{\bx}_2)^t\bw = (\bar{\bx}_1 - \bar{\bx}_2)a$ is aways the direction $(\bar{\bx}_1 - \bar{\bx}_2)$. Thus $\bw^* = \bS^{-1}_W(\bar{\bx}_1 - \bar{\bx}_2)$.
+		\item For an optimal $\bw^*$, $\bw^{*t}\bS_B\bw^* = \lambda\bw^{*t}\bS_W\bw^{*} = \lambda K$, $J(\bw)$ is maximized by the largest eigenvalue. 
+		\begin{itemize}
+			\item $\bS_W$ is invertible. $\bw^*$ is the eigenvector corresponding to the largest eigenvalue of $\bS^{-1}_W\bS_B$.
+			\item $\bS_W$ is not invertible. $\bw^*$ is the eigenvector corresponding to the largest eigenvalue of $[\bS^{-1}_W+\alpha I]^{-1}\bS_B$, which is equivalent to a new regularized problem:\\
+			$$\max_{\bw}~ \bw^t\bS_B\bw, ~s.t.~ \bw^t\bS_W\bw = K, ~ \|\bw\|=L$$
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Outline}
+\setbeamercovered{transparent}
+	\begin{enumerate}
+		\item<1-2> Lagrange Optimization
+		\vspace{0.1in}
+		\item<1-2> Generalized Rayleigh Quotient 
+		\vspace{0.1in}
+		\item<2> Exercises 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{3. Exercises}
+	\begin{block}{Chapter 4. Problem 35}
+		Consider two normal distribution with arbitrary but equal convariances. Prove that the Fisher linear discriminant, for suitable threshold, can be derived from the negative of the log-likelihood ratio. 
+	\end{block}
+\end{frame}
+
+\begin{frame}{3. Exercises}
+	\textbf{Prove}. 
+	\begin{itemize}
+		\item Recall normal distribution. 
+		\begin{align}
+			p(\mathbf{x}|\mathbf{w}_i) = \frac{1}{(2\pi)^{d/2}|\mathbf{\Sigma}|^{1/2}} \exp\Big[-\frac{1}{2}(\mathbf{x}-\mathbf{\mu}_i)^t\mathbf{\Sigma}_i^{-1}(\mathbf{x}-\mathbf{\mu}_i)\Big] \nonumber
+		\end{align}
+		\item Negative likelihood ratio.
+		\scriptsize
+		\begin{align}
+			&-\ln \frac{p(\mathbf{x}|\mathbf{w}_i)}{p(\mathbf{x}|\mathbf{w}_j)} \nonumber\\
+			&= \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_i) - \frac{1}{2}(\mathbf{x}-\mathbf{\mu}_j)^t\mathbf{\Sigma}^{-1}(\mathbf{x}-\mathbf{\mu}_j)  \nonumber\\
+			&= (\mathbf{\mu}_j - \mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\bx - \frac{\mathbf{\mu}_i+\mathbf{\mu}_j}{2})\\
+			&= \big[\mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)\big]^t \bx + \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)\\
+			&=\mathbf{w}^t\bx + w_0 
+		\end{align}
+		We obtain the FLD projection function $w = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_j - \mathbf{\mu}_i)$, and the threshold is $w_0 = \frac{1}{2}(\mathbf{\mu}_i - \mathbf{\mu}_j)\mathbf{\Sigma}^{-1}(\mathbf{\mu}_i + \mathbf{\mu}_j)^{-1}$. \#
+		\normalsize
+	\end{itemize}
+\end{frame}
+
+\end{document} 

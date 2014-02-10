@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1391658371 "T3.tex" "T3.pdf" "T3" 1391658372
+["pdflatex"] 1391658371 "T3.tex" "T3.pdf" "T3" 1391676156
   "/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii" 1378714618 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1378714613 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1378714613 8237 52810bdb4db2270e717422560a104aea ""
@@ -161,8 +161,8 @@
   "T3.out" 1391658372 0 d41d8cd98f00b204e9800998ecf8427e ""
   "T3.tex" 1391658371 6788 de70caff7d5a6668c0545fcbecd9e8b0 ""
   (generated)
-  "T3.aux"
   "T3.pdf"
   "T3.log"
-  "T3.out"
   "T3.nav"
+  "T3.aux"
+  "T3.out"
