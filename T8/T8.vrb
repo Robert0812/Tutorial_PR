@@ -1,0 +1,16 @@
+Quick start:
+\scriptsize
+\begin{lstlisting}[language=Python]
+# import libsvm packages
+>>> from svmutil import *
+
+# Read data in LIBSVM format
+>>> y, x = svm_read_problem('../heart_scale')
+
+# SVM training
+>>> m = svm_train(y[:200], x[:200], '-c 4')
+
+# SVM testing
+>>> p_label, p_acc, p_val = svm_predict(y[200:], x[200:], m)
+\end{lstlisting}
+\normalsize
