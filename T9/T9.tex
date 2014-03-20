@@ -1,0 +1,111 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{ENGG 5202: Midterm Solution}
+%\author{Rui Zhao}
+\date{March 2014}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{mathtools}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem 1}
+1. False. \\
+2. False. \\
+3. True, when the number of training samples is very large, $P(\theta | D)$ approaches a delta function, $\delta(\theta - \hat{\theta})$ equivalent to the Maximum Likelihood estimation. In Bayesian estimation, $P(x|D) = \int{p(x|\theta)p(\theta|D)} d\theta = \int{p(x|\theta)\delta(\theta - \hat{\theta})}$ .\\
+4. False \\
+5. False. Since there are enough training samples, high-order polynomial coefficients will approach zeros. Thus, 10th degree polynomial will not lead to overfitting problem. \\
+6. True. Null space LDA projects training sample to a subspace where within-class variance is zero, which means samples of each class will be projected to a single point, $w^t\bar{x}_1$ and $w^t\bar{x}_2$ in this case. And if $w^t\bar{x}_1 \neq w^t\bar{x}_2$, the two projected centers are different, so we can completely separate two classes, and achieve zero classification error. \\
+7. False. \\
+8. False. Given $x_t$, $x_{t-1}$ and $x_{t+1}$ are not blocked since there are path through the hidden variables, thus, $x_{t-1}$ and $x_{t+1}$ are not independent given $x_t$.\\
+9. True. Since the nearest neighbor error rate is bounded by Bayes error rate, i.e. $P^* \leq P \leq P^*(2- \frac{c}{c-1}P^*)$, when $P^* = 0$, we have $P_n = P = 0$ given infinite training samples.\\
+10. True. 
+
+
+\section{Problem 2}
+(1)
+The discriminative function is 
+\begin{align}
+	g_i(x) = \ln p(\mathbf{x} | w_i) + \ln P(w_i) \qquad\qquad\qquad\qquad\\
+	p(\mathbf{x} | w_i) \sim \mathcal{N}(\mathbf{\mu}_i, \mathbf{\Sigma}_i),~ \Sigma_1 = \Sigma_2 = \Sigma \qquad\qquad\qquad\qquad\\
+	\Rightarrow g_i(x) = -\frac{1}{2}(\mathbf{x} - \mathbf{\mu}_i)^t\mathbf{\Sigma}^{-1}(\mathbf{x} - \mathbf{\mu}_i) - \frac{d}{2}\ln 2\pi - \frac{1}{2}\ln |\mathbf{\Sigma}| + \ln P(w_i)\nonumber
+\end{align}
+Ignore terms unrelated to class $i$, we have 
+\begin{align}
+g_i(x) = \mathbf{x}^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_i -\frac{1}{2}\mathbf{\mu}_i^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_i + \ln P(w_i)
+\end{align}
+Decision boundary is the hyperplane defined by $g_1(\mathbf{x}) = g_2(\mathbf{x})$, 
+\begin{align}
+\mathbf{x}^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_1 -\frac{1}{2}\mathbf{\mu}_1^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_1 + \ln P(w_1) = \mathbf{x}^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_2 -\frac{1}{2}\mathbf{\mu}_2^t\mathbf{\Sigma}^{-1}\mathbf{\mu}_2 + \ln P(w_2)\\
+\Rightarrow (\mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2))^t\mathbf{x}-\Big(\frac{1}{2}(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 + \mathbf{\mu}_2) - \ln \frac{P(w_1)}{P(w_2)}\Big) =0\\
+\Leftrightarrow \mathbf{w}^t(\mathbf{x} - \mathbf{x}_0) = 0 \qquad\qquad\qquad\qquad\qquad\qquad
+\end{align}
+where 
+\begin{align}
+\mathbf{w} = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2), \quad\mathbf{x}_0 = \frac{1}{2}(\mathbf{\mu}_1+\mathbf{\mu}_2) - \frac{\ln [P(w_1)/P(w_2)](\mathbf{\mu}_1 - \mathbf{\mu}_2)}{(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2)}
+\end{align} \\
+\vspace{0.2in}
+(2) To make the decision boundary passes through middle of two class means, i.e. $\mathbf{x}_0 = \frac{1}{2}(\mathbf{\mu}_1+\mathbf{\mu}_2)$.
+\begin{align}
+\Rightarrow \frac{\ln [P(w_1)/P(w_2)](\mathbf{\mu}_1 - \mathbf{\mu}_2)}{(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2)} = 0 
+\end{align}
+Because $\Sigma$ is positive definite, and $\mu_1 \neq \mu_2$, we know that 
+$(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t\mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2) > 0$, thus, the condition is $P(w_1) = P(w_2)$.  
+\\
+\vspace{0.2in}
+(3) To make the $\mathbf{w}$ in the same direction as $\mathbf{\mu}_1 - \mathbf{\mu}_2$, i.e.
+\begin{align}
+    \mathbf{w} = \mathbf{\Sigma}^{-1}(\mathbf{\mu}_1 - \mathbf{\mu}_2) = \lambda (\mathbf{\mu}_1 - \mathbf{\mu}_2)
+\end{align}
+where $\lambda > 0$, this indicates that $\mathbf{\mu}_1 - \mathbf{\mu}_2$ is one of the eigenvector of $\Sigma$ or $\Sigma^{-1}$ with non-zero eigenvalue.
+
+(4) Not possible. If $\mathbf{w}$ is orthogonal to $\mathbf{\mu}_1 - \mathbf{\mu}_2$, then
+\begin{align}
+(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t\mathbf{w} &= (\mathbf{\mu}_1 - \mathbf{\mu}_2)^t \mathbf{\Sigma}^{-1} (\mathbf{\mu}_1 - \mathbf{\mu}_2) = 0
+\end{align}
+But $\Sigma$ is positive definite and so is $\Sigma^{-1}$, thus we have $(\mathbf{\mu}_1 - \mathbf{\mu}_2)^t \mathbf{\Sigma}^{-1} (\mathbf{\mu}_1 - \mathbf{\mu}_2) > 0 $ when $\mu_1 \neq \mu_2$, which is a contradiction.
+
+\section{Problem 3}
+Likelihood of each class is 
+\begin{align}
+P(D_i|\theta_i) = \prod_{k=1}^2\frac{2}{\theta_i}(1-\frac{x_k}{\theta_i}), ~~\theta_i \geq \max_{k}{x_k}
+\end{align}
+For class 1:
+\begin{align}
+P(D_1|\theta_1) = \frac{4}{\theta^2_1}(1-\frac{2}{\theta_1})(1-\frac{5}{\theta_1}), ~~ \theta_1 \geq 5
+\end{align}
+Let $t_1 = \frac{1}{\theta_1}$, we have
+\begin{align}
+P(D_1|t_1) = 4t_1^2(1-2t_1)(1-5t_1), ~~ 0 < t_1 \leq \frac{1}{5} \\
+\frac{\partial P(D_1|t_1)}{\partial t_1} = 160t_1^3 -84t_1^2 + 8t_1 = 0, ~~ 0 < t_1 \leq \frac{1}{5}
+\end{align}
+It is easy to see $t_1 = 0, ~\frac{1}{8}$, or $\frac{2}{5}$. With $0 < t_1 \leq \frac{1}{5}$, we get $t_1 = \frac{1}{8}$, then $\theta_1 = 8$.
+Similarly for class 2: 
+\begin{align}
+P(D_2|\theta_2) = \frac{4}{\theta^2_2}(1-\frac{3}{\theta_2})(1-\frac{9}{\theta_2}), ~~ \theta_2 \geq 9
+\end{align}
+Let $t_2 = \frac{1}{\theta_2}$, we have
+\begin{align}
+P(D_2|t_2) = 4t_2^2(1-3t_2)(1-9t_2), ~~ 0 < t_2 \leq \frac{1}{9} \\
+\frac{\partial P(D_2|t_2)}{\partial t_2} = 4(108t_2^3 -36t_2^2 + 2t_2) = 0, ~~ 0 < t_2 \leq \frac{1}{9}
+\end{align}
+It is easy to see $t_2 = 0$ or $\frac{3\pm\sqrt{3}}{18}$. With $0 < t_1 \leq \frac{1}{9}$, we get $t_2 = \frac{3-\sqrt{3}}{18}$, then $\theta_2 = \frac{18}{3-\sqrt{3}} = 9+3\sqrt{3}$. \\
+
+\section{Problem 4}
+For each EM iteration, estimation of $a_{12}$ is updated in the M step as follow
+\begin{align}
+\hat{a}_{12} = \frac{\sum_{t=2}^T\xi_{t-1}(w_1, w_2)}{\sum_{t=2}^T\sum_{j'=1}^c\xi_{t-1}(w_1, w_{j'})}
+\end{align}
+where $\xi_t(w_1, w_2)$ depends on the initialization of $a_{12}$
+\begin{align}
+\xi_t(w_1, w_2) = \frac{\alpha_t(w_1)a_{12}P(x_{t+1}|z_{t+1}=w_2)\beta_{t+1}(w_2)}{\sum_{j'}\alpha_t(w_{j'})\beta_t(w_{j'})}
+\end{align}
+If $a_{12}$ is initialized to be zero, then $\xi_t(w_1, w_2)$ will all be zeros for $t=2, \hdots, T$. Therefore, $a_{12}$ will remain zero in all subsequent EM updates. [Remark: refer to Tutorial 5 for detailed derivation]
+
+\bibliographystyle{plain}
+%\bibliography{references}
+\end{document}
