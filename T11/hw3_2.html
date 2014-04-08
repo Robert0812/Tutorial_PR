@@ -1,0 +1,490 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>hw3</title><meta name="generator" content="MATLAB 7.14"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-04"><meta name="DC.source" content="hw3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">1.1 mean face</a></li><li><a href="#3">1.2 PCA</a></li><li><a href="#4">1.3 PCA to gallery and test, and compute recognition accuracy w.r.t different PCA_dim</a></li><li><a href="#5">2.1 Intral-personal subspace</a></li><li><a href="#6">2.3 DIFS fast</a></li><li><a href="#7">3.1 PCA + FLD</a></li></ul></div><pre class="codeinput">load <span class="string">3_2.mat</span>
+</pre><h2>1.1 mean face<a name="2"></a></h2><pre class="codeinput">mean_trn = mean(Train, 2);
+figure(1)
+imshow(reshape(mean_trn, [41, 27]))
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_01.png" alt=""> <h2>1.2 PCA<a name="3"></a></h2><pre class="codeinput">pca = apply_PCA(Train);
+figure(2)
+plot(pca.e_value);
+
+last = find(pca.e_value &lt; 0.1, 1);
+figure(3)
+<span class="keyword">for</span> i = 1:10
+   subplot(2, 10, i);
+   imshow(reshape(pca.e_vector(:, i), [41, 27]), [])
+   subplot(2, 10, i+10);
+   imshow(reshape(pca.e_vector(:, last - 10 + i), [41, 27]), [])
+<span class="keyword">end</span>
+<span class="comment">% The first 10 eigenfaces capture the main variations in the training set,</span>
+<span class="comment">% including, lighting variations, expression variations, and identity</span>
+<span class="comment">% variations. However, the last 10 eigenfaces captures the noises in the</span>
+<span class="comment">% face image</span>
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_02.png" alt=""> <img vspace="5" hspace="5" src="hw3_files/hw3_03.png" alt=""> <h2>1.3 PCA to gallery and test, and compute recognition accuracy w.r.t different PCA_dim<a name="4"></a></h2><pre class="codeinput">T = 100; <span class="comment">% test T trials</span>
+PCA_dims = floor(linspace(1, numel(pca.e_value), T));
+sqdist_pw = @(A, B) bsxfun(@plus,full(dot(B,B,1)),full(dot(A,A,1))')-full(2*(A'*B));
+acc = zeros(1, T);
+<span class="keyword">for</span> i = 1:T
+    N = PCA_dims(i);
+    gdata = proj_PCA(pca, Gallery, N);
+    qdata = proj_PCA(pca, Test, N);
+    pwdist = sqdist_pw(gdata, qdata);
+    acc(i) = get_acc(pwdist);
+<span class="keyword">end</span>
+pwdist = sqdist_pw(Gallery, Test);
+acc_pix = get_acc(pwdist);
+
+figure(4);
+plot(acc); hold <span class="string">on</span>;
+plot(ones(1, T)*acc_pix);
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_04.png" alt=""> <h2>2.1 Intral-personal subspace<a name="5"></a></h2><pre class="codeinput">dX = Train(:, 1:2:end) - Train(:, 2:2:end);
+scatter_train = double(dX*dX');
+
+[e_vector, e_value] =  eigs(scatter_train, size(dX, 2), <span class="string">'la'</span>);
+intra.e_vector = e_vector;
+intra.e_value = diag(e_value);
+
+figure(5)
+<span class="keyword">for</span> i = 1:10
+   subplot(2, 10, i);
+   imshow(reshape(intra.e_vector(:, i), [41, 27]), []);
+   subplot(2, 10, i+10);
+   imshow(reshape(pca.e_vector(:, i), [41, 27]), []);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_05.png" alt=""> <h2>2.3 DIFS fast<a name="6"></a></h2><pre class="codeinput">L = intra.e_vector./repmat(sqrt(intra.e_value(:))', size(intra.e_vector, 1), 1);
+
+T = 100;
+PCA_dims = floor(linspace(1, numel(intra.e_value), T));
+acc = zeros(1, T);
+<span class="keyword">for</span> i = 1:T
+    N = PCA_dims(i);
+    M = L(:, 1:N)*L(:, 1:N)' + eye(size(L, 1))*1e-10;
+    pwdist = sqdistance(Gallery, Test, M);
+    acc(i) = get_acc(pwdist);
+<span class="keyword">end</span>
+pwdist = sqdist_pw(Gallery, Test);
+acc_pix = get_acc(pwdist);
+
+figure(6);
+plot(acc); hold <span class="string">on</span>;
+plot(ones(1, T)*acc_pix);
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_06.png" alt=""> <h2>3.1 PCA + FLD<a name="7"></a></h2><p>get Sb and Sw</p><pre class="codeinput">dim = size(Train, 1);
+Xk_mean = (Train(:, 1:2:end) + Train(:, 2:2:end))./2;
+Sb = zeros(dim, dim);
+Sw = zeros(dim, dim);
+<span class="keyword">for</span> k = 1:size(Xk_mean, 2)
+    Sb = Sb + 2*(Xk_mean(:, k) - mean(Train, 2)) * (Xk_mean(:, k) - mean(Train, 2))';
+    Sw = Sw + (Train(:, 2*k-1) - Xk_mean(:, k)) * (Train(:, 2*k-1) - Xk_mean(:, k))';
+    Sw = Sw + (Train(:, 2*k) - Xk_mean(:, k)) * (Train(:, 2*k) - Xk_mean(:, k))';
+<span class="keyword">end</span>
+pca = apply_PCA(Train);
+
+T = 20;
+n_pca_max = size(Train, 2) - max(Train_Label); <span class="comment">% n-c</span>
+n_fld_max = max(Train_Label) - 1; <span class="comment">% c-1</span>
+dp = floor(linspace(10, n_pca_max, T));
+dl = floor(linspace(10, n_fld_max, T));
+acc = zeros(T, T);
+<span class="keyword">for</span> p = 1:T
+    <span class="keyword">for</span> l = 1:T
+        dim_dp = dp(p);
+        dim_dl = dl(l);
+        <span class="keyword">if</span> dim_dl &gt;= dim_dp-1
+            <span class="keyword">continue</span>;
+        <span class="keyword">end</span>
+        w_pca = pca.e_vector(:, 1:dim_dp);
+        Sw_ = w_pca' * Sw * w_pca;
+        Sb_ = w_pca' * Sb * w_pca;
+
+        [e_vector, e_value] = eigs(Sw_\Sb_, dim_dl, <span class="string">'lr'</span>);
+        w_fld = e_vector;
+        w_opt = w_pca * w_fld;
+
+        gdata = w_opt'*Gallery;
+        qdata = w_opt'*Test;
+        pwdist = sqdist_pw(gdata, qdata);
+        acc(p, l) = get_acc(pwdist);
+        fprintf(<span class="string">'dp:%d, dl:%d, acc: %.2f%%\n'</span>, dp(p), dl(l), acc(p,l)*100);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+figure(7);
+surf(acc);
+</pre><pre class="codeoutput">dp:35, dl:10, acc: 83.57%
+dp:61, dl:10, acc: 80.00%
+dp:61, dl:35, acc: 95.00%
+dp:86, dl:10, acc: 84.00%
+dp:86, dl:35, acc: 94.71%
+dp:86, dl:60, acc: 94.43%
+dp:112, dl:10, acc: 84.43%
+dp:112, dl:35, acc: 95.86%
+dp:112, dl:60, acc: 94.86%
+dp:112, dl:86, acc: 94.14%
+dp:137, dl:10, acc: 83.14%
+dp:137, dl:35, acc: 95.86%
+dp:137, dl:60, acc: 94.71%
+dp:137, dl:86, acc: 94.43%
+dp:137, dl:111, acc: 93.71%
+dp:163, dl:10, acc: 83.43%
+dp:163, dl:35, acc: 94.86%
+dp:163, dl:60, acc: 95.29%
+dp:163, dl:86, acc: 95.14%
+dp:163, dl:111, acc: 94.00%
+dp:163, dl:137, acc: 93.57%
+dp:188, dl:10, acc: 81.86%
+dp:188, dl:35, acc: 94.00%
+dp:188, dl:60, acc: 95.86%
+dp:188, dl:86, acc: 95.14%
+dp:188, dl:111, acc: 94.57%
+dp:188, dl:137, acc: 93.86%
+dp:188, dl:162, acc: 92.71%
+dp:214, dl:10, acc: 82.14%
+dp:214, dl:35, acc: 92.86%
+dp:214, dl:60, acc: 94.57%
+dp:214, dl:86, acc: 94.71%
+dp:214, dl:111, acc: 94.57%
+dp:214, dl:137, acc: 94.71%
+dp:214, dl:162, acc: 93.29%
+dp:214, dl:188, acc: 93.14%
+dp:239, dl:10, acc: 79.71%
+dp:239, dl:35, acc: 93.43%
+dp:239, dl:60, acc: 94.71%
+dp:239, dl:86, acc: 94.43%
+dp:239, dl:111, acc: 94.29%
+dp:239, dl:137, acc: 94.00%
+dp:239, dl:162, acc: 93.29%
+dp:239, dl:188, acc: 92.71%
+dp:239, dl:213, acc: 92.14%
+dp:265, dl:10, acc: 78.00%
+dp:265, dl:35, acc: 92.43%
+dp:265, dl:60, acc: 94.00%
+dp:265, dl:86, acc: 94.14%
+dp:265, dl:111, acc: 93.86%
+dp:265, dl:137, acc: 93.29%
+dp:265, dl:162, acc: 92.86%
+dp:265, dl:188, acc: 92.57%
+dp:265, dl:213, acc: 92.14%
+dp:265, dl:239, acc: 91.43%
+dp:290, dl:10, acc: 74.57%
+dp:290, dl:35, acc: 92.00%
+dp:290, dl:60, acc: 92.71%
+dp:290, dl:86, acc: 93.71%
+dp:290, dl:111, acc: 93.43%
+dp:290, dl:137, acc: 93.14%
+dp:290, dl:162, acc: 92.71%
+dp:290, dl:188, acc: 91.71%
+dp:290, dl:213, acc: 91.29%
+dp:290, dl:239, acc: 90.57%
+dp:290, dl:264, acc: 90.86%
+dp:316, dl:10, acc: 73.43%
+dp:316, dl:35, acc: 91.71%
+dp:316, dl:60, acc: 92.29%
+dp:316, dl:86, acc: 93.14%
+dp:316, dl:111, acc: 93.14%
+dp:316, dl:137, acc: 92.43%
+dp:316, dl:162, acc: 92.14%
+dp:316, dl:188, acc: 91.43%
+dp:316, dl:213, acc: 91.57%
+dp:316, dl:239, acc: 90.00%
+dp:316, dl:264, acc: 89.71%
+dp:316, dl:290, acc: 88.86%
+dp:341, dl:10, acc: 71.57%
+dp:341, dl:35, acc: 91.29%
+dp:341, dl:60, acc: 92.14%
+dp:341, dl:86, acc: 93.00%
+dp:341, dl:111, acc: 92.71%
+dp:341, dl:137, acc: 91.71%
+dp:341, dl:162, acc: 91.29%
+dp:341, dl:188, acc: 90.71%
+dp:341, dl:213, acc: 90.71%
+dp:341, dl:239, acc: 89.86%
+dp:341, dl:264, acc: 89.86%
+dp:341, dl:290, acc: 89.00%
+dp:341, dl:315, acc: 88.29%
+dp:367, dl:10, acc: 67.14%
+dp:367, dl:35, acc: 88.86%
+dp:367, dl:60, acc: 91.43%
+dp:367, dl:86, acc: 91.00%
+dp:367, dl:111, acc: 91.71%
+dp:367, dl:137, acc: 91.14%
+dp:367, dl:162, acc: 90.57%
+dp:367, dl:188, acc: 90.14%
+dp:367, dl:213, acc: 89.43%
+dp:367, dl:239, acc: 89.14%
+dp:367, dl:264, acc: 88.29%
+dp:367, dl:290, acc: 87.86%
+dp:367, dl:315, acc: 87.71%
+dp:367, dl:341, acc: 86.57%
+dp:392, dl:10, acc: 62.14%
+dp:392, dl:35, acc: 88.14%
+dp:392, dl:60, acc: 90.14%
+dp:392, dl:86, acc: 90.71%
+dp:392, dl:111, acc: 91.57%
+dp:392, dl:137, acc: 90.00%
+dp:392, dl:162, acc: 89.29%
+dp:392, dl:188, acc: 89.29%
+dp:392, dl:213, acc: 88.71%
+dp:392, dl:239, acc: 88.43%
+dp:392, dl:264, acc: 87.71%
+dp:392, dl:290, acc: 87.29%
+dp:392, dl:315, acc: 86.57%
+dp:392, dl:341, acc: 85.57%
+dp:392, dl:366, acc: 84.86%
+dp:418, dl:10, acc: 55.43%
+dp:418, dl:35, acc: 84.86%
+dp:418, dl:60, acc: 88.43%
+dp:418, dl:86, acc: 89.86%
+dp:418, dl:111, acc: 89.14%
+dp:418, dl:137, acc: 88.71%
+dp:418, dl:162, acc: 88.43%
+dp:418, dl:188, acc: 88.00%
+dp:418, dl:213, acc: 87.43%
+dp:418, dl:239, acc: 87.14%
+dp:418, dl:264, acc: 86.86%
+dp:418, dl:290, acc: 86.00%
+dp:418, dl:315, acc: 84.86%
+dp:418, dl:341, acc: 85.14%
+dp:418, dl:366, acc: 84.00%
+dp:418, dl:392, acc: 82.43%
+dp:443, dl:10, acc: 45.71%
+dp:443, dl:35, acc: 82.43%
+dp:443, dl:60, acc: 86.29%
+dp:443, dl:86, acc: 87.29%
+dp:443, dl:111, acc: 88.14%
+dp:443, dl:137, acc: 87.86%
+dp:443, dl:162, acc: 87.29%
+dp:443, dl:188, acc: 85.57%
+dp:443, dl:213, acc: 86.00%
+dp:443, dl:239, acc: 86.29%
+dp:443, dl:264, acc: 85.71%
+dp:443, dl:290, acc: 85.00%
+dp:443, dl:315, acc: 84.71%
+dp:443, dl:341, acc: 84.43%
+dp:443, dl:366, acc: 83.00%
+dp:443, dl:392, acc: 81.14%
+dp:443, dl:417, acc: 80.43%
+dp:469, dl:10, acc: 36.86%
+dp:469, dl:35, acc: 77.29%
+dp:469, dl:60, acc: 84.00%
+dp:469, dl:86, acc: 85.29%
+dp:469, dl:111, acc: 86.14%
+dp:469, dl:137, acc: 86.00%
+dp:469, dl:162, acc: 85.14%
+dp:469, dl:188, acc: 85.00%
+dp:469, dl:213, acc: 84.71%
+dp:469, dl:239, acc: 84.14%
+dp:469, dl:264, acc: 83.14%
+dp:469, dl:290, acc: 83.14%
+dp:469, dl:315, acc: 82.71%
+dp:469, dl:341, acc: 81.57%
+dp:469, dl:366, acc: 81.00%
+dp:469, dl:392, acc: 79.86%
+dp:469, dl:417, acc: 79.29%
+dp:469, dl:443, acc: 77.57%
+dp:495, dl:10, acc: 30.57%
+dp:495, dl:35, acc: 72.00%
+dp:495, dl:60, acc: 77.86%
+dp:495, dl:86, acc: 82.86%
+dp:495, dl:111, acc: 84.43%
+dp:495, dl:137, acc: 83.57%
+dp:495, dl:162, acc: 83.29%
+dp:495, dl:188, acc: 83.00%
+dp:495, dl:213, acc: 82.57%
+dp:495, dl:239, acc: 82.71%
+dp:495, dl:264, acc: 83.00%
+dp:495, dl:290, acc: 81.57%
+dp:495, dl:315, acc: 81.43%
+dp:495, dl:341, acc: 80.71%
+dp:495, dl:366, acc: 79.43%
+dp:495, dl:392, acc: 78.00%
+dp:495, dl:417, acc: 76.71%
+dp:495, dl:443, acc: 76.29%
+dp:495, dl:468, acc: 75.71%
+</pre><img vspace="5" hspace="5" src="hw3_files/hw3_07.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.14<br></p></div><!--
+##### SOURCE BEGIN #####
+load 3_2.mat
+
+%% 1.1 mean face
+
+mean_trn = mean(Train, 2);
+figure(1)
+imshow(reshape(mean_trn, [41, 27]))
+
+%% 1.2 PCA 
+
+pca = apply_PCA(Train);
+figure(2)
+plot(pca.e_value);
+
+last = find(pca.e_value < 0.1, 1);
+figure(3)
+for i = 1:10
+   subplot(2, 10, i);
+   imshow(reshape(pca.e_vector(:, i), [41, 27]), [])
+   subplot(2, 10, i+10);
+   imshow(reshape(pca.e_vector(:, last - 10 + i), [41, 27]), [])
+end
+% The first 10 eigenfaces capture the main variations in the training set,
+% including, lighting variations, expression variations, and identity
+% variations. However, the last 10 eigenfaces captures the noises in the
+% face image
+
+
+%% 1.3 PCA to gallery and test, and compute recognition accuracy w.r.t different PCA_dim
+
+T = 100; % test T trials
+PCA_dims = floor(linspace(1, numel(pca.e_value), T));
+sqdist_pw = @(A, B) bsxfun(@plus,full(dot(B,B,1)),full(dot(A,A,1))')-full(2*(A'*B));
+acc = zeros(1, T);
+for i = 1:T
+    N = PCA_dims(i);
+    gdata = proj_PCA(pca, Gallery, N);
+    qdata = proj_PCA(pca, Test, N);
+    pwdist = sqdist_pw(gdata, qdata);
+    acc(i) = get_acc(pwdist);
+end
+pwdist = sqdist_pw(Gallery, Test);
+acc_pix = get_acc(pwdist);
+
+figure(4);
+plot(acc); hold on;
+plot(ones(1, T)*acc_pix);
+
+
+%% 2.1 Intral-personal subspace
+dX = Train(:, 1:2:end) - Train(:, 2:2:end);
+scatter_train = double(dX*dX');
+
+[e_vector, e_value] =  eigs(scatter_train, size(dX, 2), 'la');
+intra.e_vector = e_vector;
+intra.e_value = diag(e_value);
+
+figure(5)
+for i = 1:10
+   subplot(2, 10, i);
+   imshow(reshape(intra.e_vector(:, i), [41, 27]), []);
+   subplot(2, 10, i+10);
+   imshow(reshape(pca.e_vector(:, i), [41, 27]), []);
+end
+
+%% 2.3 DIFS fast
+L = intra.e_vector./repmat(sqrt(intra.e_value(:))', size(intra.e_vector, 1), 1);
+
+T = 100;
+PCA_dims = floor(linspace(1, numel(intra.e_value), T));
+acc = zeros(1, T);
+for i = 1:T
+    N = PCA_dims(i);
+    M = L(:, 1:N)*L(:, 1:N)' + eye(size(L, 1))*1e-10;
+    pwdist = sqdistance(Gallery, Test, M);
+    acc(i) = get_acc(pwdist);
+end
+pwdist = sqdist_pw(Gallery, Test);
+acc_pix = get_acc(pwdist);
+
+figure(6);
+plot(acc); hold on;
+plot(ones(1, T)*acc_pix);
+
+
+%% 3.1 PCA + FLD
+% get Sb and Sw
+dim = size(Train, 1);
+Xk_mean = (Train(:, 1:2:end) + Train(:, 2:2:end))./2;
+Sb = zeros(dim, dim);
+Sw = zeros(dim, dim);
+for k = 1:size(Xk_mean, 2)
+    Sb = Sb + 2*(Xk_mean(:, k) - mean(Train, 2)) * (Xk_mean(:, k) - mean(Train, 2))';
+    Sw = Sw + (Train(:, 2*k-1) - Xk_mean(:, k)) * (Train(:, 2*k-1) - Xk_mean(:, k))';
+    Sw = Sw + (Train(:, 2*k) - Xk_mean(:, k)) * (Train(:, 2*k) - Xk_mean(:, k))';
+end
+pca = apply_PCA(Train);
+
+T = 20;
+n_pca_max = size(Train, 2) - max(Train_Label); % n-c
+n_fld_max = max(Train_Label) - 1; % c-1
+dp = floor(linspace(10, n_pca_max, T));
+dl = floor(linspace(10, n_fld_max, T));
+acc = zeros(T, T);  
+for p = 1:T
+    for l = 1:T
+        dim_dp = dp(p);
+        dim_dl = dl(l);
+        if dim_dl >= dim_dp-1
+            continue;
+        end
+        w_pca = pca.e_vector(:, 1:dim_dp);
+        Sw_ = w_pca' * Sw * w_pca;
+        Sb_ = w_pca' * Sb * w_pca;        
+        
+        [e_vector, e_value] = eigs(Sw_\Sb_, dim_dl, 'lr');
+        w_fld = e_vector;  
+        w_opt = w_pca * w_fld;
+       
+        gdata = w_opt'*Gallery;
+        qdata = w_opt'*Test;
+        pwdist = sqdist_pw(gdata, qdata);
+        acc(p, l) = get_acc(pwdist);
+        fprintf('dp:%d, dl:%d, acc: %.2f%%\n', dp(p), dl(l), acc(p,l)*100);
+    end
+end
+figure(7);
+surf(acc);
+
+##### SOURCE END #####
+--></body></html>
